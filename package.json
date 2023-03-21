@@ -1,0 +1,18 @@
+{
+  "name": "cs-546-ws-2023-group-53",
+  "version": "1.0.0",
+  "description": "Final project repository for CS-546-WS 2023 course",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongodb": "^5.1.0",
+    "nodemon": "^2.0.21"
+  }
+}
