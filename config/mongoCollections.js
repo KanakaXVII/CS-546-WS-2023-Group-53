@@ -21,3 +21,6 @@ const getCollectionFn = (collection) => {
 
 // Configure all collections related to the project --> export const ... = getCollectionFn('<name>');
 export const users = getCollectionFn('users');
+export const paychecks = getCollectionFn('paychecks');
+export const transactions = getCollectionFn('transactions');
+export const budgets = getCollectionFn('budgets');

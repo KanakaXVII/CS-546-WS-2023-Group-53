@@ -1,4 +1,5 @@
 // Imports
+import userDataFunctions from './users.js';
 
-
-// Export each set of functions
+// Exports
+export const userData = userDataFunctions;
