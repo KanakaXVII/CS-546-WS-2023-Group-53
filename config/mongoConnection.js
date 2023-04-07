@@ -1,5 +1,5 @@
 // Imports
-import { mongoClient } from 'mongodb';
+import { MongoClient } from 'mongodb';
 import { mongoConfig } from './settings.js';
 
 // Init DB variables
@@ -9,7 +9,7 @@ let _db = undefined;
 // Function to connect to the DB
 const dbConnection = async () => {
     if (!_connection) {
-        _connection = await MongoClient.connect(mongoConfig.serverUr);
+        _connection = await MongoClient.connect(mongoConfig.serverUrl);
         _db = _connection.db(mongoConfig.database);
     }
 

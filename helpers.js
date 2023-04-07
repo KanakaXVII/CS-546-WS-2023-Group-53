@@ -1,5 +1,7 @@
 // Imports
 import { ObjectId } from 'mongodb';
+import { users } from './config/mongoCollections.js';
+import bcrypt from 'bcrypt';
 
 /* ----- String Validation ----- */
 const validateString = (varName, varVal) => {
@@ -38,6 +40,14 @@ const validateWebsite = (varName, varVal) => {
     domain_space = domain_space.join('.');
 
     if (domain_space.length < 5) throw `Error: ${varName} domain must be greater than 5 characters. ${domain_space} is not valid.`;
+}
+
+const validateEmail = (varName, varVal) => {
+    // Make sure value is a valid string
+    validateString(varName, varVal);
+
+    // Check for legal a valid email domain format
+    if (!varVal.includes('@')) throw `Error: ${varName} does not have a domain (@example.com)`;
 }
 
 
@@ -119,9 +129,75 @@ const validateArray = (varName, varVal, subType=['string'], minimumVals=0) => {
     });
 }
 
-/* ----- Multi-Input Validations ----- */
 
-// Functions to handle new object creation such as users or transactions will go here
+
+/* ----- Multi-Input Validations ----- */
+const validateUserInfo = (userInfo) => {
+    // Create an object for value validation
+    const newUserInputs = {
+        firstName: userInfo.firstName,
+        lastName: userInfo.lastName,
+        email: userInfo.email,
+        password: userInfo.password
+    };
+
+    // Create some lists for validation by type
+    const strInputs = ['firstName', 'lastName', 'password'];
+
+    // Iterate to validate
+    for (const [k, v] of Object.entries(newUserInputs)) {
+        if (strInputs.includes(k)) {
+            // Validate strings
+            try {
+                validateString(k, v);
+            } catch (e) {
+                throw [400, e];
+            }
+        }
+    }
+
+    // Validate the email parameter
+    try {
+        validateEmail('User Email', newUserInputs.email);
+    } catch (e) {
+        throw [400, e];
+    }
+};
+
+
+
+/* ----- Formatting Helpers ----- */
+const formatError = (e) => {
+    let errorAttrs = {};
+    errorAttrs['status'] = e[0] ? e[0] : 500;
+    errorAttrs['message'] = e[1] ? e[1] : 'Internal Server Error';
+
+    return errorAttrs;
+};
+
+const saltAndHashPassword = async (password) => {
+    // Generate a salt with multile rounds
+    const salt = await bcrypt.genSalt(10);
+    
+    // Hash the password with the salt
+    const hash = await bcrypt.hash(password, salt);
+
+    // Return the salty hashed password
+    return hash;
+};
+
+
+/* ----- DB Validation Helpers ----- */
+const validateEmailDuplicative = async (email) => {
+    // Get the collection
+    const userCollection = await users();
+
+    // Make sure there are no users with this email already
+    const user = await userCollection.findOne({email: email});
+
+    // Validate the results
+    if (user !== null) throw `Error: ${email} already has an account`;
+};
 
 // Export all functions
 export {
@@ -131,5 +207,9 @@ export {
     validateObjectId, 
     validateArray, 
     validateWebsite,
-    validateDateString
+    validateDateString,
+    validateUserInfo,
+    validateEmailDuplicative,
+    saltAndHashPassword,
+    formatError
 };
