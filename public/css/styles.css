@@ -1,0 +1,70 @@
+/* ----- HTML Elements ----- */
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
+    
+}
+
+footer {
+    position: fixed;
+    bottom: 10px;
+    text-align: center;
+    width: 100%;
+    font-weight: bolder;
+}
+
+/* ----- Class Sets ----- */
+.loginPage {
+    margin: 0 auto;
+    width: 90%;
+    text-align: center;
+}
+
+.loginForm {
+    margin: 10% auto;
+    width: 50%;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: #11999e;
+    box-shadow: 0px 15px 15px rgba(0, 0, 0, 0.5);
+}
+
+.loginForm label {
+    color: #f4f4f4;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.loginForm input {
+    padding: 8px;
+}
+
+/* ----- ID Sets ----- */
+#loginSubmit {
+    margin-top: 10%;
+    font-family: 'Open Sans', sans-serif;
+    padding: 8px;
+    background-color: #3c3c3c;
+    color: #f4f4f4;
+    font-weight: bold;
+    border-radius: 15px;
+}
+
+#loginSubmit:hover {
+    box-shadow: 0px 0px 20px rgba(255, 255, 255, 1);
+}
+
+#loginSubmit:active {
+    background-color: #f4f4f4;
+    color: #3c3c3c;
+}
+
+/*
+Colors:
+    - #3c3c3c: General Backgrounds
+    - #11999e
+    - #6decb9
+    - #f4f4f4: Headers and Buttons
+*/

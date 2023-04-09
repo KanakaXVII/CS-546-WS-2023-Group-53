@@ -1,0 +1,34 @@
+<main>
+    <div class="loginPage">
+        <h1>{{ title }}</h1>
+        
+        <!-- Description -->
+        <p>
+            Welcome! Please log in below to start taking control of your financial life!
+        </p>
+
+        <!-- Render Errors -->
+        {{#if hasErrors}}
+        <ul class="errorList">
+            {{#each errors}}
+            <li>
+                {{this}}
+            </li>
+            {{/each}}
+        </ul>
+        {{/if}}
+
+        <form action="/loginRedirect" method="POST" class="loginForm">
+            <!-- Email Input -->
+            <label for="emailInput">Email</label><br>
+            <input type="email" name="emailInput" id="emailInput" placeholder="john.doe@gmail.com" autofocus required><br>
+
+            <!-- Password Input -->
+            <label for="passwordInput">Password</label><br>
+            <input type="password" name="passwordInput" id="passwordInput" required><br>
+
+            <!-- Submit -->
+            <input type="submit" id="loginSubmit">
+        </form>
+    </div>
+</main>

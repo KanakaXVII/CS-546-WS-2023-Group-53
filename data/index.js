@@ -1,7 +1,7 @@
 // Imports
 import userDataFunctions from './users.js';
 import transactionDataFunctions from './transactions.js';
-import budgetDataFunctions from './budget.js';
+import budgetDataFunctions from './budgets.js';
 
 // Exports
 export const userData = userDataFunctions;
