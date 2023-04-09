@@ -1,7 +1,7 @@
 // Imports
 import { budgets } from '../config/mongoCollections.js';
 import { ObjectId } from 'mongodb';
-import { getTransactionsForUser } from './transactions.js';
+import transactionData from './transactions.js';
 
 /*
 DB operations involving budgets will be defined and completed here. This includes:
