@@ -22,5 +22,19 @@ router.route('/').get(async (req, res) => {
     }
 });
 
+router.route('/processLogin').post(async (req, res) => {
+    // Get form data
+    const formData = req.body;
+
+    // Reformat the form inputs
+    const userLoginInputs = {
+        email: req.body = formData.emailInput,
+        password: req.body = formData.passwordInput
+    };
+
+    // Search for a user with the matching email
+    // This needs the remaining user operations created in another branch...
+})
+
 // Export the router
 export default router;
