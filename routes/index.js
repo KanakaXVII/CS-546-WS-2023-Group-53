@@ -7,7 +7,7 @@ import budgetRoutes from './budgets.js';
 const constructorMethod = (app) => {
     // Configure the app to use all routes --> app.use('/<route>', <importedFile>);
     app.use('/users', userRoutes);
-      app.use('/transactions', transactionRoutes);
+    app.use('/transactions', transactionRoutes);
     app.use('/budgets', budgetRoutes);
     
     // Set the default route

@@ -30,7 +30,7 @@ router
         // Add new user to DB
         try {
             // Call the data function
-            const newUser = await userData.create(
+            const newUser = await userData.createUser(
                 userInfo.firstName,
                 userInfo.lastName,
                 userInfo.email,
@@ -44,6 +44,133 @@ router
             const errorAttrs = helpers.formatError(e);
             return res.status(errorAttrs.status).json({error: errorAttrs.message});
         }
+    });
+
+router
+    .route('/:id/payment')
+    .post(async (req, res) => {
+        // Get the request body and ID param
+        const payMethodInfo = req.body;
+        const id = req.params.id;
+
+        // Validate the inputs
+        try {
+            // Validate payment method inputs
+            helpers.validatePaymentMethod(payMethodInfo);
+
+            // Validate ID input
+            helpers.validateObjectId('User ID', id);
+        } catch (e) {
+            // Format and send error response
+            const errorAttrs = helpers.formatError(e);
+            return res.status(errorAttrs.status).json({error: errorAttrs.message});
+        }
+
+        // Add the payment method
+        try {
+            // Call the data function
+            const modifiedUser = await userData.createPaymentMethod(id, payMethodInfo.name, payMethodInfo.type);
+
+            // Send results back
+            res.json(modifiedUser);
+        } catch (e) {
+            // Format and send error response
+            const errorAttrs = helpers.formatError(e);
+            return res.status(errorAttrs.status).json({error: errorAttrs.message});
+        }
+    })
+    .get(async (req, res) => {
+        // Get the ID param
+        const id = req.params.id;
+
+        // Validate the ID param
+        try {
+            helpers.validateObjectId('User ID', id);
+        } catch (e) {
+            // Format and send error response
+            const errorAttrs = helpers.formatError(e);
+            return res.status(errorAttrs.status).json({error: errorAttrs.message});
+        }
+
+        // Get the payment methods
+        try {
+            // Call the data function
+            const userPayMethods = await userData.getPaymentMethodsByID(id);
+
+            // Send results back
+            res.json(userPayMethods);
+        } catch (e) {
+            // Format and send error response
+            const errorAttrs = helpers.formatError(e);
+            return res.status(errorAttrs.status).json({error: errorAttrs.message});
+        }
+    })
+    .patch(async (req, res) => {
+        // Get the request body and the user ID
+        const payId = req.body.id;
+        const newName = req.body.newName;
+        const userId = req.params.id;
+
+        // Validate the inputs
+        try {
+            // Validate the ID values
+            helpers.validateObjectId('Pay Method ID', payId);
+            console.log('1');
+            helpers.validateObjectId('User ID', userId);
+            console.log('2');
+
+            // Validate the new name
+            helpers.validateString('New Pay Method Name', newName);
+        } catch (e) {
+            // Format and send error response
+            const errorAttrs = helpers.formatError(e);
+            return res.status(errorAttrs.status).json({error: errorAttrs.message});
+        }
+
+        // Update the method
+        try {
+            // Call the data function
+            const response = await userData.updatePaymentMethodByID(userId, payId, newName);
+
+            // Return the response
+            res.json(response);
+        } catch (e) {
+            // Format and send error response
+            const errorAttrs = helpers.formatError(e);
+            return res.status(errorAttrs.status).json({error: errorAttrs.message});
+        }
+    })
+    .delete(async (req, res) => {
+        // Get the request body and user ID
+        const payId = req.body._id;
+        const id = req.params.id;
+
+        // Validate inputs
+        try {
+            // Validate payMethod
+            helpers.validateObjectId('Pay Method ID', payId);
+
+            // Validate Object ID
+            helpers.validateObjectId('User ID', id);
+        } catch (e) {
+            // Format and send error response
+            const errorAttrs = helpers.formatError(e);
+            return res.status(errorAttrs.status).json({error: errorAttrs.message});
+        }
+
+        // Delete the method
+        try {
+            // Call the data function
+            const response = await userData.deletePaymentMethodByID(id, payId);
+
+            // Return the response
+            res.json(response);
+        } catch (e) {
+            // Format and send error response
+            const errorAttrs = helpers.formatError(e);
+            return res.status(errorAttrs.status).json({error: errorAttrs.message});
+        }
+        
     });
 
 // Export the router
