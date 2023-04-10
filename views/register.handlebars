@@ -1,10 +1,10 @@
 <main>
-    <div class="loginPage">
+    <div class="registerPage">
         <h1>{{ title }}</h1>
         
         <!-- Description -->
         <p>
-            Welcome! Please log in below to start taking control of your financial life!
+            Welcome! Please register your new account below!
         </p>
 
         <!-- Render Errors -->
@@ -19,10 +19,17 @@
         {{/if}}
 
         <!-- Login Form -->
-        <form action="/loginRedirect" method="POST" class="loginForm">
+        <form action="/" method="POST" class="registerForm">
             <!-- Email Input -->
             <label for="emailInput">Email</label><br>
             <input type="email" name="emailInput" id="emailInput" placeholder="john.doe@gmail.com" autofocus required><br>
+
+            <!-- Personal Information Input -->
+            <label for="firstNameInput">First Name</label><br>
+            <input type="text" name="firstNameInput" id="firstNameInput" placeholder="John" required><br>
+
+            <label for="lastNameInput">Last Name</label><br>
+            <input type="text" name="lastNameInput" id="lastNameInput" placeholder="Doe"><br>
 
             <!-- Password Input -->
             <label for="passwordInput">Password</label><br>
@@ -32,6 +39,6 @@
             <input type="submit" id="loginSubmit">
         </form>
         <!-- Register New User --> 
-        <a class="register-login-swap-button" href="http://localhost:3000/register">New User? Create An Account!</a>
+        <a class="register-login-swap-button" href="http://localhost:3000/">Already Have An Account? Login Here!</a>
     </div>
 </main>
