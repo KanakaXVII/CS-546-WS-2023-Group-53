@@ -47,7 +47,6 @@ router.route('/processRegister').post(async (req, res) => {
     // Validate the form inputs
     const errors = helpers. validateUserInfo(newUserInputs);
 
-
     // See if there are any errorss
     if (errors.length > 0) {
         try {
@@ -68,7 +67,7 @@ router.route('/processRegister').post(async (req, res) => {
 
     // Create the new user
     try {
-        const newUser = await userData.create(
+        const newUser = await userData.createUser(
             newUserInputs.firstName, 
             newUserInputs.lastName,
             newUserInputs.email,

@@ -110,6 +110,20 @@ const getUserByID = async (id) => {
     return user;
 };
 
+// Get User By Email
+const getUserByEmail = async (email) => {
+    // Get the DB collection
+    const userCollection = await users();
+
+    // Search for the target record
+    const user = await userCollection.findOne(
+        {email: email}
+    );
+
+    // Return the user
+    return user;
+}
+
 // Get Payment Methods by ID
 const getPaymentMethodsByID = async (id) => {
     // Get the DB collection
@@ -191,6 +205,7 @@ export default {
     createUser,
     createPaymentMethod,
     getUserByID,
+    getUserByEmail,
     getPaymentMethodsByID,
     updatePaymentMethodByID,
     deletePaymentMethodByID
