@@ -1,0 +1,44 @@
+<main>
+    <div class="registerPage">
+        <h1>{{ title }}</h1>
+        
+        <!-- Description -->
+        <p>
+            Welcome! Please register your new account below!
+        </p>
+
+        <!-- Render Errors -->
+        {{#if hasErrors}}
+        <ul class="errorList">
+            {{#each errors}}
+            <li>
+                {{this}}
+            </li>
+            {{/each}}
+        </ul>
+        {{/if}}
+
+        <!-- Login Form -->
+        <form action="/register/processRegister" method="POST" class="registerForm">
+            <!-- Email Input -->
+            <label for="emailInput">Email</label><br>
+            <input type="email" name="emailInput" id="emailInput" placeholder="john.doe@gmail.com" value="{{inputs.email}}" autofocus required><br>
+
+            <!-- Personal Information Input -->
+            <label for="firstNameInput">First Name</label><br>
+            <input type="text" name="firstNameInput" id="firstNameInput" placeholder="John" value="{{inputs.firstName}}" required><br>
+
+            <label for="lastNameInput">Last Name</label><br>
+            <input type="text" name="lastNameInput" id="lastNameInput" placeholder="Doe" value="{{inputs.lastName}}"><br>
+
+            <!-- Password Input -->
+            <label for="passwordInput">Password</label><br>
+            <input type="password" name="passwordInput" id="passwordInput" value="{{inputs.password}}" required><br>
+
+            <!-- Submit -->
+            <input type="submit" id="registerSubmit">
+        </form>
+        <!-- Register New User --> 
+        <a class="register-login-swap-button" href="http://localhost:3000/">Already Have An Account? Login Here!</a>
+    </div>
+</main>

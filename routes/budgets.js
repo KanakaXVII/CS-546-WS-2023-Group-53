@@ -123,8 +123,8 @@ router
           const errorAttrs = helpers.formatError(e);
           return res.status(errorAttrs.status).json({ error: errorAttrs.message });
         }
-      });
+  });
     
-    // Export the router
-    export default router;
-    
+// Export the router
+export default router;
+

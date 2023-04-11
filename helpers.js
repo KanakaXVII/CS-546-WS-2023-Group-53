@@ -50,6 +50,45 @@ const validateEmail = (varName, varVal) => {
     if (!varVal.includes('@')) throw [400, `Error: ${varName} does not have a domain (@example.com)`];
 };
 
+const validatePassword = (varName, varVal) => {
+    // Make sure value is a valid string
+    validateString(varName, varVal);
+
+    // Init storage for passwords
+    let errors = [];
+
+    // Make sure password is at least 8 characters long
+    if (varVal.length < 8) {
+        errors.push('Password must be at least 8 characters long');
+    }
+
+    // Make sure password contains at least one lowercase letter
+    const oneLowerPattern = /^(?=.*[a-z])/;
+    if (!oneLowerPattern.test(varVal)) {
+        errors.push('Password must contain at least 1 lowercase letter');
+    }
+
+    // Make sure password contains at least one uppercase letter
+    const oneUpperPattern = /^(?=.*[A-Z])/;
+    if (!oneUpperPattern.test(varVal)) {
+        errors.push('Password must contain at least 1 uppercase letter');
+    }
+
+    // Make sure password contains at least one number
+    const oneNumPattern = /^(?=.*\d)/;
+    if (!oneNumPattern.test(varVal)) {
+        errors.push('Password must contain at least 1 number');
+    }
+
+    // Make sure password has at least one symbol
+    const oneSymbolPattern = /^(?=.*[!@#$%^&*_+.<>/?-])/;
+    if (!oneSymbolPattern.test(varVal)) {
+        errors.push('Password must contain at least 1 symbol (! @ # $ % ^ & * _ + . < > / ? -');
+    }
+
+    return errors;
+}
+
 
 
 /* ----- Numerical Validation ----- */
@@ -129,8 +168,11 @@ const validateUserInfo = (userInfo) => {
         password: userInfo.password
     };
 
+    // Init errors
+    let errors = [];
+
     // Create some lists for validation by type
-    const strInputs = ['firstName', 'lastName', 'password'];
+    const strInputs = ['firstName', 'lastName'];
 
     // Iterate to validate
     for (const [k, v] of Object.entries(newUserInputs)) {
@@ -139,17 +181,27 @@ const validateUserInfo = (userInfo) => {
             try {
                 validateString(k, v);
             } catch (e) {
-                throw [400, e];
+                errors.push(e);
             }
         }
+    }
+
+    // Validate the password parameter
+    try {
+        const passwordErrors = validatePassword('User Password', newUserInputs.password);
+        errors = errors.concat(passwordErrors);
+    } catch (e) {
+        errors.concat(e);
     }
 
     // Validate the email parameter
     try {
         validateEmail('User Email', newUserInputs.email);
     } catch (e) {
-        throw [400, e];
+        errors.push(e);
     }
+
+    return errors;
 };
 
 const validatePaymentMethod = (paymentMethodInfo) => {
@@ -214,7 +266,7 @@ const validateEmailDuplicative = async (email) => {
 export {
     validateString, 
     validateNumber,
-    validateYear, 
+    validateYear,
     validateObjectId, 
     validateArray, 
     validateWebsite,
