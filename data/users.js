@@ -151,7 +151,28 @@ const getPaymentMethodsByID = async (id) => {
 /*
     Update Functions:
     - Update Payment Method
+    - Update User
 */
+
+const updateUserByID = async (userID, userUpdates) => {
+    // Get the DB collection
+    const userCollection = await users();
+
+    // Convert the User ID to an Object ID
+    const userId = new ObjectId(userID);
+
+    // Try to update it
+    const updatedUser = await userCollection.updateOne(
+        {_id: userId},
+        {$set: userUpdates}
+    );
+
+    // Validate the update
+    if (updatedUser.modifiedCount === 0) throw [500, 'Error: User profile could not be updated'];
+
+    // Send the response
+    return {message: 'Successfully updated user.'};
+}
 
 const updatePaymentMethodByID = async (userId, payId, newName) => {
     // Get the DB collection
@@ -168,6 +189,7 @@ const updatePaymentMethodByID = async (userId, payId, newName) => {
     );
 
     // Validate the update
+    if (updatedPayMethod,modifiedCount === 0) throw [500, 'Error: Payment method could not be updated'];
 
     // Send the response
     return {message: 'Successfully updated payment method name.'};
@@ -207,6 +229,7 @@ export default {
     getUserByID,
     getUserByEmail,
     getPaymentMethodsByID,
+    updateUserByID,
     updatePaymentMethodByID,
     deletePaymentMethodByID
 };
