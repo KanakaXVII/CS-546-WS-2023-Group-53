@@ -4,11 +4,13 @@ import transactionRoutes from './transactions.js';
 import budgetRoutes from './budgets.js';
 import loginRoutes from './login.js';
 import registerRoutes from './register.js';
+import forgotPasswordRoutes from './forgot-password.js';
 
 // Build a constructor to glue routes together
 const constructorMethod = (app) => {
     // Configure the app to use all routes --> app.use('/<route>', <importedFile>);
     app.use('/', loginRoutes);
+    app.use('/recovery', forgotPasswordRoutes);
     app.use('/register', registerRoutes);
     app.use('/users', userRoutes);
     app.use('/transactions', transactionRoutes);
