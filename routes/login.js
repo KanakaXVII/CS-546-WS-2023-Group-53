@@ -58,15 +58,16 @@ router.route('/processLogin').post(async (req, res) => {
     
     // Process validation
     if (passwordCheck) {
-        try {
-            res.render('../views/dashboard', { // Placeholder view
-                title: 'Dashboard'
-            });
-        } catch (e) {
-            // Format and send error response
-            const errorAttrs = helpers.formatError(e);
-            return res.status(errorAttrs.status).json({error: errorAttrs.message});
-        }
+        // Store the email and ID for the session
+        const moddedUserProfile = user;
+        delete user['password'];
+
+        req.session.profile = moddedUserProfile;
+
+        // Render the dashboard
+        res.render('../views/dashboard', { // Placeholder view
+            title: 'Dashboard'
+        });
     } else {
         try {
             res.render('../views/login', {

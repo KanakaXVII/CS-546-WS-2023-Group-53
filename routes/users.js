@@ -47,6 +47,80 @@ router
     });
 
 router
+    .route('/:id')
+    .post(async (req, res) => {
+        // Get the form data
+        const formData = req.body;
+
+        // Determine if user has any pay methods
+        let hasPayMethods = undefined;
+        if (req.session.profile.paymentMethods.length === 0) {
+            hasPayMethods = false;
+        } else {
+            hasPayMethods = true;
+        }
+
+        // Init new payload for DB
+        const profileChanges = {};
+
+        // Init errors
+        let errors = [];
+
+        // Validate entries and add them to DB payload
+        for (const [k, v] of Object.entries(formData)) {
+            if (v !== '') {
+                // Validate the input
+                try{
+                    await helpers.validateString(k, v);
+                    profileChanges[k] = v;
+                } catch (e) {
+                    errors.push(e);
+                }
+            }
+        }
+
+        // Re-render page if there are errors
+        if (errors.length > 0) {
+            res.render('profile', {
+                title: 'Profile',
+                profile: req.session.profile,
+                errors: errors,
+                hasErrors: true,
+                changeSuccess: false,
+                hasPayMethods: hasPayMethods
+            });
+
+            return;
+        }
+
+        // Update the user info in the DB
+        try {
+            const updatedUser = await userData.updateUserByID(req.session.profile._id, profileChanges);
+        } catch (e) {
+            res.render('profile', {
+                title: 'Profile',
+                profile: req.session.profile,
+                errors: errors,
+                hasErrors: true,
+                changeSuccess: false,
+                hasPayMethods: hasPayMethods
+            });
+
+            return;
+        }
+
+        // Render the profile page with new updates and a success message
+        res.render('profile', {
+            title: 'Profile',
+            profile: req.session.profile,
+            errors: errors,
+            hasErrors: false,
+            changeSuccess: true,
+            hasPayMethods: hasPayMethods
+        });
+    });
+
+router
     .route('/:id/payment')
     .post(async (req, res) => {
         // Get the request body and ID param
@@ -170,7 +244,6 @@ router
             const errorAttrs = helpers.formatError(e);
             return res.status(errorAttrs.status).json({error: errorAttrs.message});
         }
-        
     });
 
 // Export the router
