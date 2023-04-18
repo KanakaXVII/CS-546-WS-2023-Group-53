@@ -1,8 +1,12 @@
-import { Router } from 'express';
+import { Router, render } from 'express';
 import { transactionData } from '../data/index.js';
 import * as helpers from '../helpers.js';
 
 const router = Router();
+
+router.get('/add', (req, res) => {
+    render(res, 'addTransaction', { title: 'Add Transaction' });
+});
 
 router
     .route('/')
