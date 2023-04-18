@@ -110,14 +110,8 @@ router
         }
 
         // Render the profile page with new updates and a success message
-        res.render('profile', {
-            title: 'Profile',
-            profile: req.session.profile,
-            errors: errors,
-            hasErrors: false,
-            changeSuccess: true,
-            hasPayMethods: hasPayMethods
-        });
+        res.redirect('/profile');
+        
     });
 
 router
