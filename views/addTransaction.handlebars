@@ -1,51 +1,40 @@
-<!-- views/addTransaction.hbs -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
-</head>
-<body>
-    <main>
-        <div class="transactionPage">
-            <h1>{{title}}</h1>
+<main>
+    <div class="transactionPage">
+        <h1>{{title}}</h1>
 
-            <p>
-                Add a new transaction
-            </p>
+        <p>
+            Add a new transaction
+        </p>
 
-            <!-- Transaction Form -->
-            <form action="/transactions/add" method="POST" class="transactionForm">
-                <!-- Date Input -->
-                <label for="dateInput">Date</label><br>
-                <input type="date" name="dateInput" id="dateInput" required><br>
+        <!-- Transaction Form -->
+        <form action="/transactions/add" method="POST" class="transactionForm">
+            <!-- Date Input -->
+            <label for="dateInput">Date</label><br>
+            <input type="date" name="dateInput" id="dateInput" required><br>
 
-                <!-- Method Input -->
-                <label for="methodInput">Payment Method</label><br>
-                <select name="methodInput" id="methodInput" required>
-                    <option value="Credit Card">Credit Card</option>
-                    <option value="Debit Card">Debit Card</option>
-                    <option value="Cash">Cash</option>
-                    <option value="Bank Transfer">Bank Transfer</option>
-                </select><br>
+            <!-- Method Input -->
+            <label for="methodInput">Payment Method</label><br>
+            <select name="methodInput" id="methodInput" required>
+                <option value="Credit Card">Credit Card</option>
+                <option value="Debit Card">Debit Card</option>
+                <option value="Cash">Cash</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+            </select><br>
 
-                <!-- Expense Name Input -->
-                <label for="expenseNameInput">Expense Name</label><br>
-                <input type="text" name="expenseNameInput" id="expenseNameInput" placeholder="House Payment" required><br>
+            <!-- Expense Name Input -->
+            <label for="expenseNameInput">Expense Name</label><br>
+            <input type="text" name="expenseNameInput" id="expenseNameInput" placeholder="House Payment" required><br>
 
-                <!-- Amount Input -->
-                <label for="amountInput">Amount</label><br>
-                <input type="number" name="amountInput" id="amountInput" step="0.01" placeholder="1000" required><br>
+            <!-- Amount Input -->
+            <label for="amountInput">Amount</label><br>
+            <input type="number" name="amountInput" id="amountInput" step="0.01" placeholder="1000" required><br>
 
-                <!-- Category Input -->
-                <label for="categoryInput">Category</label><br>
-                <input type="text" name="categoryInput" id="categoryInput" placeholder="Mortgage" required><br>
+            <!-- Category Input -->
+            <label for="categoryInput">Category</label><br>
+            <input type="text" name="categoryInput" id="categoryInput" placeholder="Mortgage" required><br>
 
-                <!-- Submit -->
-                <input type="submit" id="transactionSubmit">
-            </form>
-        </div>
-    </main>
-</body>
-</html>
+            <!-- Submit -->
+            <input type="submit" id="transactionSubmit">
+        </form>
+    </div>
+</main>
