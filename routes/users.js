@@ -111,7 +111,35 @@ router
 
         // Render the profile page with new updates and a success message
         res.redirect('/profile');
+    })
         
+    .delete(async (req, res) => {
+        // Get the ID param
+        const userID = req.params.id;
+        
+
+        // Validate the input
+        try {
+            // Validate object ID parameter
+            helpers.validateObjectId('User ID', userID);
+        } catch (e) {
+            // Format and send error response
+            const errorAttrs = helpers.formatError(e);
+            return res.status(errorAttrs.status).json({error: errorAttrs.message});
+        }
+
+        // Try to delete the user
+        try {
+            // Call the data function
+            const deletedUser = await userData.deleteUserByID(userID);
+
+            // Show the response
+            res.json(deletedUser);
+        } catch (e) {
+            // Format and send error response
+            const errorAttrs = helpers.formatError(e);
+            return res.status(errorAttrs.status).json({error: errorAttrs.message});
+        }
     });
 
 router

@@ -198,7 +198,27 @@ const updatePaymentMethodByID = async (userId, payId, newName) => {
 /*
     Delete Functions:
     - Delete Payment Method
+    - Delete User Method
 */
+
+const deleteUserByID = async (id) => {
+    // Get the DB collection
+    const userCollection = await users();
+
+    // Convert the ID to an object ID
+    const user_id = new ObjectId(id);
+
+    // Try to delete user
+    const deletedUser = await userCollection.deleteOne(
+        {_id: user_id}
+    );
+
+    // Validate the response
+    if (deletedUser.deletedCount === 0) throw [500, `Error: Failed to delete user`];
+
+    // Return a success message
+    return {statusCode: 200, message: 'Successfully deleted user'};
+};
 
 const deletePaymentMethodByID = async (id, payId) => {
     // Get the DB collection
@@ -231,5 +251,6 @@ export default {
     getPaymentMethodsByID,
     updateUserByID,
     updatePaymentMethodByID,
-    deletePaymentMethodByID
+    deletePaymentMethodByID,
+    deleteUserByID
 };
