@@ -5,6 +5,7 @@ import budgetRoutes from './budgets.js';
 import loginRoutes from './login.js';
 import registerRoutes from './register.js';
 import forgotPasswordRoutes from './forgot-password.js';
+import profileRoutes from './profile.js';
 
 // Build a constructor to glue routes together
 const constructorMethod = (app) => {
@@ -12,6 +13,7 @@ const constructorMethod = (app) => {
     app.use('/', loginRoutes);
     app.use('/recovery', forgotPasswordRoutes);
     app.use('/register', registerRoutes);
+    app.use('/profile', profileRoutes);
     app.use('/users', userRoutes);
     app.use('/transactions', transactionRoutes);
     app.use('/budgets', budgetRoutes);

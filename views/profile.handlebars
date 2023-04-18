@@ -1,0 +1,51 @@
+<main>
+    <!-- Title -->
+    <h1>{{ title }}</h1>
+
+    <!-- User Information -->
+    <h2>Welcome Back {{ profile.firstName }}!</h2>
+    <p>Name: {{ profile.firstName }} {{ profile.lastName }}</p>
+    <p>Email: {{ profile.email }}</p>
+    
+    <!-- User Payment Methods -->
+    {{#if hasPayMethods}}
+    <h2>Your Payment Methods</h2>
+    <ul>
+    {{#each profile.paymentMethods}}
+        <li>{{ this.name }}</li>
+    {{/each}}
+    </ul>
+    {{/if}}
+
+    <br>
+    
+    <!-- Changes Section -->
+    <h2>Settings</h2>
+    {{#if changeSuccess}}
+    <p class="successMessage">Your profile was successfully updated!</p>
+    {{/if}}
+
+    <form action="/users/{{ profile._id }}" method="POST">
+        <!-- Name Change Input -->
+        <label for="firstName">Change First Name?</label>
+        <input type="text" name="firstName" id="changeFirstName"><br>
+
+        <label for="lastName">Change Last Name?</label>
+        <input type="text" name="lastName" id="changeLastName"><br>
+
+        <!-- Submit -->
+        <input type="submit" id="changeProfileSubmit">
+    </form>
+
+    {{#if hasErrors}}
+    <ul class="errorList">
+        {{#each errors}}
+        <li>
+            {{ this }}
+        </li>
+        {{/each}}
+    </ul>
+    {{/if}}
+
+    <a href="/dashboard">Go Back</a>
+</main>

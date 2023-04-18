@@ -4,6 +4,7 @@ import configRoutes from './routes/index.js';
 import exphbs from 'express-handlebars';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import session from 'express-session';
 
 // Create variables for the path directory
 const __filename = fileURLToPath(import.meta.url);
@@ -20,6 +21,13 @@ app.use(express.urlencoded({ extended: true }));
 // Configure the template engine
 app.engine('handlebars', exphbs.engine({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
+
+// Set the app up to use sessions
+app.use(session({
+    secret: process.env.SESSION_KEY,
+    resave: false,
+    saveUninitialized: true
+}));
 
 // Configure routes
 configRoutes(app);
