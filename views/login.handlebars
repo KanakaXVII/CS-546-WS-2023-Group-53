@@ -38,3 +38,50 @@
         <a class="forgot-password-link" href="/recovery/forgot-password">Forgot Password?</a>
     </div>
 </main>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('login-form');
+    const emailInput = document.getElementById('email-input');
+    const passwordInput = document.getElementById('password-input');
+    const emailError = document.getElementById('email-error');
+    const passwordError = document.getElementById('password-error');
+
+    loginForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      let isValid = true;
+
+      const email = emailInput.value;
+      const password = passwordInput.value;
+
+      if (!validateEmail(email)) {
+        emailError.textContent = 'Please enter a valid email address.';
+        emailError.style.display = 'block';
+        isValid = false;
+      } else {
+        emailError.style.display = 'none';
+      }
+
+      if (!validatePassword(password)) {
+        passwordError.textContent = 'Password must be at least 8 characters long, including uppercase, lowercase, and numbers.';
+        passwordError.style.display = 'block';
+        isValid = false;
+      } else {
+        passwordError.style.display = 'none';
+      }
+
+      if (isValid) {
+        loginForm.submit();
+      }
+    });
+  });
+
+  function validateEmail(email) {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return emailRegex.test(email);
+  }
+
+  function validatePassword(password) {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    return passwordRegex.test(password);
+  }
+</script>
