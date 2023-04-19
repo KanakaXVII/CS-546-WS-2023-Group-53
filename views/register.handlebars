@@ -9,7 +9,7 @@
 
         <!-- Render Errors -->
         {{#if hasErrors}}
-        <ul class="errorList">
+        <ul class="errorList" id="errorList">
             {{#each errors}}
             <li>
                 {{this}}
@@ -17,6 +17,7 @@
             {{/each}}
         </ul>
         {{/if}}
+        <div id="errorContainer"></div>
 
         <!-- Login Form -->
         <form action="/register/processRegister" method="POST" class="registerForm">
@@ -42,3 +43,57 @@
         <a class="register-login-swap-button" href="/">Already Have An Account? Login Here!</a>
     </div>
 </main>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const registerForm = document.querySelector('.registerForm');
+    const errorList = document.getElementById('errorList');
+
+    function validateEmail(email) {
+      const re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+      return re.test(email);
+    }
+
+    function validatePassword(password) {
+      // Adjust the password requirements to your preference
+      const minLength = 8;
+      const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\w\W]{8,}$/;
+      return re.test(password) && password.length >= minLength;
+    }
+
+    registerForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const emailInput = document.getElementById('emailInput');
+      const passwordInput = document.getElementById('passwordInput');
+      const email = emailInput.value;
+      const password = passwordInput.value;
+
+      const errors = [];
+
+      if (!validateEmail(email)) {
+        errors.push('Invalid email format');
+      }
+
+      if (!validatePassword(password)) {
+        errors.push('Invalid password. Password must have at least 8 characters, including 1 uppercase letter, 1 lowercase letter, and 1 number');
+      }
+
+      if (errors.length === 0) {
+        registerForm.action = "/register/processRegister";
+        registerForm.method = "POST";
+        registerForm.submit();
+      } else {
+        // Show error messages if validation fails
+        errorList.innerHTML = '';
+        errors.forEach((error) => {
+          const li = document.createElement('li');
+          li.textContent = error;
+          errorList.appendChild(li);
+        });
+
+        const errorContainer = document.getElementById('errorContainer');
+        errorContainer.innerHTML = '<p>Please correct input.</p>';
+      }
+    });
+  });
+</script>
