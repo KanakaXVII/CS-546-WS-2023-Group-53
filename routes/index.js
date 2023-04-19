@@ -6,6 +6,7 @@ import loginRoutes from './login.js';
 import registerRoutes from './register.js';
 import forgotPasswordRoutes from './forgot-password.js';
 import profileRoutes from './profile.js';
+import paycheckRoutes from './paychecks.js';
 
 // Build a constructor to glue routes together
 const constructorMethod = (app) => {
@@ -17,6 +18,7 @@ const constructorMethod = (app) => {
     app.use('/users', userRoutes);
     app.use('/transactions', transactionRoutes);
     app.use('/budgets', budgetRoutes);
+    app.use('/paychecks', paycheckRoutes);
     
     // Set the default route
     app.use('*', (req, res) => {
