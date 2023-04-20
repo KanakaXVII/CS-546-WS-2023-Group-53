@@ -66,7 +66,8 @@ router.route('/processLogin').post(async (req, res) => {
 
         // Render the dashboard
         res.render('../views/dashboard', { // Placeholder view
-            title: 'Dashboard'
+            title: 'Dashboard',
+            userProfile: req.session.profile
         });
     } else {
         try {

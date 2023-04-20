@@ -5,6 +5,37 @@ import { ObjectId } from 'mongodb';
 import * as helpers from '../helpers.js';
 
 /*
+    Get Functions
+    - Get All Paychecks by User ID
+*/
+
+const getPaychecksByUserId = async(userId) => {
+    // Validate that the user exists
+    let user = undefined;
+
+    try {
+        user = await userData.getUserByID(userId);
+    } catch (e) {
+        throw [500, e];
+    }
+
+    if (!user || user === undefined) {
+        throw [404, "User not found"];
+    }
+
+    // Mount the paychecks collection
+    const paycheckCollection = await paychecks();
+
+
+    // Search for records with the user ID
+    const userPaychecks = await paycheckCollection.find({'userId': new ObjectId(userId)}).toArray();
+
+    // Return response
+    return userPaychecks;
+};
+
+
+/*
     Create Functions
     - Create New Paycheck
 */
@@ -16,7 +47,7 @@ const createPaycheck = async(
     notes
 ) => {
     // Validate that the user exists
-    let user = undefined
+    let user = undefined;
     try {
         user = await userData.getUserByID(userId);
     } catch (e) {
@@ -50,5 +81,6 @@ const createPaycheck = async(
 
 // Export Functions
 export default {
+    getPaychecksByUserId,
     createPaycheck
 };
