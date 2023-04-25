@@ -1,0 +1,41 @@
+<main>
+    <h1>{{ title }}</h1>
+
+    <!-- Allow User to Add New Check -->
+    <h2>Add New Check</h2>
+    <form action="/paychecks/{{userId}}" method="POST" class="newCheckForm">
+        <!-- Date Input -->
+        <label for="dateInput">Date</label><br>
+        <input type="date" name="checkDateInput" id="checkDateInput" class="checkDateInput" required><br>
+
+        <!-- Amount Input -->
+        <label for="amountInput">Amount</label><br>
+        <input type="number" name="checkAmountInput" id="checkAmountInput" class="checkAmountInput" step="0.01" required><br>
+
+        <!-- Notes Input -->
+        <label for="paycheckNotes">Notes</label><br>
+        <input type="text" name="checkNotesInput" id="checkNotesInput" class="checkNotesInput"><br>
+
+        <!-- Submit -->
+        <input type="submit" id="paycheckSubmit">
+    </form>
+
+    <!-- Render Paychecks -->
+    <h2>Paycheck History</h2>
+    {{#if hasPaychecks}}
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Notes</th>
+        </tr>
+        {{#each paychecks}}
+        <tr>
+            <td>{{ this.date }}</td>
+            <td>{{ this.amount }}</td>
+            <td>{{ this.notes }}</td>
+        </tr>
+        {{/each}}
+    </table>
+    {{/if}}
+</main>
