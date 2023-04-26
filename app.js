@@ -24,9 +24,13 @@ app.set('view engine', 'handlebars');
 
 // Set the app up to use sessions
 app.use(session({
-    secret: process.env.SESSION_KEY,
+    name: 'AuthCookie',
+    secret: 'super_secret_key',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 30000 // 30 seconds
+    }
 }));
 
 // Configure routes
