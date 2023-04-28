@@ -2,6 +2,7 @@
 import express from 'express';
 import { userData } from '../data/index.js';
 import * as helpers from '../helpers.js';
+import sgMail from '@sendgrid/mail';
 
 // Create the router
 const router = express.Router();
@@ -36,7 +37,24 @@ router.post('/reset-password', async (req, res) => {
     // Update the user's password
     const response = await userData.updateUserByID(user._id, {password: tempPasswordHash});
 
-    // Send the temporary password to the user's email (NOT SURE WHICH SERVICE TO USE)
+    // Configure SendGrid
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+    // Configure the message to send to the user
+    const msg = {
+      to: email,
+      from: process.env.SENDGRID_FROM,
+      subject: 'Lux Trax - Password Reset',
+      text: `You have requested a new password for Lux Trax. Please use the temporary password below to login and change your password.\n\n${tempPassword}`
+    };
+
+    // Send the temporary password to the user's email using SendGrid
+    try {
+      const sgResult = await sgMail.send(msg);
+      console.log(sgResult);
+    } catch (e) {
+      console.log(`Something went wrong - ${e}`);
+    }
 
     // If everything is successful, redirect back to the login page
     res.render('login', {
