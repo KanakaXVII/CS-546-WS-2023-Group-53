@@ -56,6 +56,13 @@ router.post('/reset-password', async (req, res) => {
       console.log(`Something went wrong - ${e}`);
     }
 
+    // Change the user's status to "password-reset" to trigger a forced password change
+    try {
+      const updatedUser = userData.updateUserByID(user._id.toString(), {status: 'password-reset'});
+    } catch (e) {
+      res.render('forgot-password', { error: 'An error occurred', title: 'Forgot Password' });
+    }
+
     // If everything is successful, redirect back to the login page
     res.render('login', {
       message: 'A temporary password has been sent to your email address.',

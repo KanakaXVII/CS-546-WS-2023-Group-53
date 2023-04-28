@@ -22,7 +22,8 @@ const createUser = async (
         lastName: lastName,
         email: email,
         password: password,
-        paymentMethods: []
+        paymentMethods: [],
+        status: 'active'
     };
 
     // Validate that the email does not already exist in DB

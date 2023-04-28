@@ -39,13 +39,14 @@ router.route('/processLogin').post(async (req, res) => {
     const user = await userData.getUserByEmail(userLoginInputs.email);
 
     // Validate the response
-    if (!user) {
+    if (!user || user === null) {
         try {
             res.render('../views/login', {
                 title: 'Login',
                 hasErrors: true,
                 errors: ['User not found']
             });
+            return;
         } catch (e) {
             // Format and send error response
             const errorAttrs = helpers.formatError(e);
