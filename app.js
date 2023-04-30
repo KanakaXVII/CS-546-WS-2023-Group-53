@@ -33,6 +33,73 @@ app.use(session({
     }
 }));
 
+// Middleware to check if the user is logged in
+app.use('/profile', (req, res, next) => {
+    if (!req.session.user) {
+        return res.status(403).render('login', { error: 'You must be logged in to view this page' });
+    } else {
+        next();
+    }
+});
+
+app.use('/users', (req, res, next) => {
+    if (!req.session.user) {
+        return res.status(403).render('login', { error: 'You must be logged in to view this page' });
+    } else {
+        next();
+    }
+});
+
+app.use('/transactions', (req, res, next) => {
+    if (!req.session.user) {
+        return res.status(403).render('login', { error: 'You must be logged in to view this page' });
+    } else {
+        next();
+    }
+});
+
+app.use('/budgets', (req, res, next) => {
+    if (!req.session.user) {
+        return res.status(403).render('login', { error: 'You must be logged in to view this page' });
+    } else {
+        next();
+    }
+});
+
+app.use('/paychecks', (req, res, next) => {
+    if (!req.session.user) {
+        return res.status(403).render('login', { error: 'You must be logged in to view this page' });
+    } else {
+        next();
+    }
+});
+
+app.use('/recovery', (req, res, next) => {
+    if (req.session.user) {
+        return res.status(403).render('login', { error: 'You are already logged in' });
+    } else {
+        next();
+    }
+});
+
+app.use('/register', (req, res, next) => {
+    if (req.session.user) {
+        return res.status(403).render('dashboard', { error: 'You are already logged in' });
+    } else {
+        next();
+    }
+});
+
+app.use('/', (req, res, next) => {
+    if (req.session.user) {
+        return res.status(403).render('dashboard', { error: 'You are already logged in' });
+    } else {
+        return res.status(403).render('login', { error: 'Please login before moving further' });
+    }
+});
+
+
+
 // Configure routes
 configRoutes(app);
 

@@ -1,80 +1,178 @@
 /* ----- HTML Elements ----- */
 body {
-    font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 h1 {
-    
 }
 
 footer {
-    position: fixed;
-    bottom: 10px;
-    text-align: center;
-    width: 100%;
-    font-weight: bolder;
+  position: fixed;
+  bottom: 10px;
+  text-align: center;
+  width: 100%;
+  font-weight: bolder;
 }
 
 /* ----- Class Sets ----- */
-.loginPage, .registerPage {
-    margin: 0 auto;
-    width: 90%;
-    text-align: center;
+.loginPage,
+.registerPage {
+  margin: 0 auto;
+  width: 90%;
+  text-align: center;
 }
 
-.loginForm, .registerForm {
-    margin: 10% auto;
-    width: 50%;
-    padding: 20px;
-    border-radius: 15px;
-    background-color: #11999e;
-    box-shadow: 0px 15px 15px rgba(0, 0, 0, 0.5);
+.loginForm,
+.registerForm {
+  margin: 10% auto;
+  width: 50%;
+  padding: 20px;
+  border-radius: 15px;
+  background-color: #11999e;
+  box-shadow: 0px 15px 15px rgba(0, 0, 0, 0.5);
 }
 
-.loginForm label, .registerForm label {
-    color: #f4f4f4;
-    font-weight: bold;
-    font-size: 18px;
+.loginForm label,
+.registerForm label {
+  color: #f4f4f4;
+  font-weight: bold;
+  font-size: 18px;
 }
 
-.loginForm input, .registerForm input {
-    padding: 8px;
-    border-radius: 15px;
+.loginForm input,
+.registerForm input {
+  padding: 8px;
+  border-radius: 15px;
 }
 
 .register-login-swap-button {
-    text-decoration: none;
-    padding: 15px;
-    background-color: #3c3c3c;
-    font-weight: bold;
-    border-radius: 15px;
-    color: white;
-    box-shadow: 0px 15px 15px rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+  padding: 15px;
+  background-color: #3c3c3c;
+  font-weight: bold;
+  border-radius: 15px;
+  color: white;
+  box-shadow: 0px 15px 15px rgba(0, 0, 0, 0.5);
 }
 
 .errorList {
-    color: red;
-    list-style-type: none;
+  color: red;
+  list-style-type: none;
 }
+
+.dashboard-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+  }
+  
+  .dashboard-box {
+    background-color: #f7f7f7;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 30%;
+    margin-bottom: 30px;
+  }
+  
+  .dashboard-box h2 {
+    margin-top: 0;
+    font-size: 1.2rem;
+  }
+  
+  .dashboard-box ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .dashboard-box li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+  }
+  
+  .dashboard-box li span {
+    font-weight: bold;
+  }
+  
+  .transactions-box li {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .transactions-box li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  
+  .budgets-box {
+    background-color: #ffcc66;
+    color: #333;
+  }
+  
+  .paychecks-box {
+    background-color: #6699cc;
+    color: #fff;
+  }
+  
+  .navbar {
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+  }
+  
+  .navbar-nav {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-item {
+    margin: 0 10px;
+  }
+  
+  .nav-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  .nav-link:hover {
+    background-color: #fff;
+    color: #333;
+  }
 
 /* ----- ID Sets ----- */
-#loginSubmit, #registerSubmit {
-    margin-top: 10%;
-    font-family: 'Open Sans', sans-serif;
-    padding: 8px;
-    background-color: #3c3c3c;
-    color: #f4f4f4;
-    font-weight: bold;
-    border-radius: 15px;
+#loginSubmit,
+#registerSubmit {
+  margin-top: 10%;
+  font-family: "Open Sans", sans-serif;
+  padding: 8px;
+  background-color: #3c3c3c;
+  color: #f4f4f4;
+  font-weight: bold;
+  border-radius: 15px;
 }
 
-#loginSubmit:hover, #registerSubmit:hover {
-    box-shadow: 0px 0px 20px rgba(255, 255, 255, 1);
+#loginSubmit:hover,
+#registerSubmit:hover {
+  box-shadow: 0px 0px 20px rgba(255, 255, 255, 1);
 }
 
-#loginSubmit:active, #registerSubmit:active {
-    background-color: #f4f4f4;
-    color: #3c3c3c;
+#loginSubmit:active,
+#registerSubmit:active {
+  background-color: #f4f4f4;
+  color: #3c3c3c;
 }
 
 /*
@@ -84,3 +182,5 @@ Colors:
     - #6decb9
     - #f4f4f4: Headers and Buttons
 */
+
+
