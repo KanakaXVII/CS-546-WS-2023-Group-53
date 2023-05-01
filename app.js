@@ -37,7 +37,7 @@ app.use(session({
 
 /* Middleware Functions */
 
-// Route Logging Middleware
+// Route Logging Middleware (Keep At Top of Middleware)
 app.use(async (req, res, next) => {
     // Exlude the public hits
     if (!req.originalUrl.startsWith('/public') && req.originalUrl !== '/favicon.ico') {
@@ -53,6 +53,44 @@ app.use(async (req, res, next) => {
     } else {
         next();
     }
+});
+
+// Redirect unauthenticated users
+app.use(async (req, res, next) => {
+    // Exclude login and registration pages
+    if (req.originalUrl !== '/' && req.originalUrl !== '/register' && req.originalUrl !== '/processLogin') { // Change to /login once the route is fixed in index
+        // Check if user is authed
+        if (!req.session.profile) {
+            // Log action
+            console.log('Redirecting unauthenticated user to login');
+
+            // Redirect to the login page
+            res.redirect('/'); // Change to /login once the route is fixed in index
+            return;
+        }
+    }
+
+    // Continue 
+    next();
+});
+
+// Redirect authenticated users
+app.use(async (req, res, next) => {
+    // Include login and registration pages
+    if (req.originalUrl === '/' || req.originalUrl === '/register' || req.originalUrl === '/processLogin') {
+        // Check is user is authed
+        if (req.session.profile) {
+            // Log action
+            console.log('Redirecting authenticated user to dashbaord');
+            
+            // Redirect to the dashboard
+            res.redirect('/dashboard');
+            return;
+        }
+    }
+
+    // Continue
+    next();
 });
 
 // Password Reset Check
@@ -71,6 +109,25 @@ app.use(async (req, res, next) => {
     }
 
     // Continue
+    next();
+});
+
+// Check for paycheck deletions via button
+app.use('/paychecks/paycheck/:id', async (req, res, next) => {
+    // Check to see if there is a parameter in the URL
+    if (req.query) {
+        // Check if the query is for a DELETE method
+        if (req.query.realMethod === 'DELETE') {
+            // Change the request method to a DELETE method
+            req.method = 'DELETE';
+        }
+    }
+
+    // Continue
+    next();
+});
+
+app.delete('/paychecks/paycheck/:id', async (req, res, next) => {
     next();
 });
 

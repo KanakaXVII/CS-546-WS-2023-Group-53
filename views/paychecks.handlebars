@@ -1,6 +1,11 @@
 <main>
     <h1>{{ title }}</h1>
 
+    <!-- Render Server Errors -->
+    {{#if hasErrors}}
+    <p class="errorMessage">{{errorMessage}}</p>
+    {{/if}}
+
     <!-- Allow User to Add New Check -->
     <h2>Add New Check</h2>
     <form action="/paychecks/{{userId}}" method="POST" class="newCheckForm">
@@ -34,6 +39,7 @@
             <td>{{ this.date }}</td>
             <td>${{ this.amount }}</td>
             <td>{{ this.notes }}</td>
+            <td><a href='/paychecks/paycheck/{{this._id}}?realMethod=DELETE' class="deletePaycheckButton" id="paycheck_{{this._id}}">Delete</a></td>
         </tr>
         {{/each}}
     </table>
