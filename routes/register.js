@@ -15,11 +15,12 @@ router.route('/').get(async (req, res) => {
         email: undefined,
         firstName: undefined,
         lastName: undefined,
-        password: undefined
+        firstPassword: undefined,
+        secondPassword: undefined
     }
     // Try to render the page
     try {
-        res.render('../views/register', {
+        res.render('register', {
             title: 'Sign Up',
             hasErrors: false,
             inputs: inputs,
@@ -41,16 +42,17 @@ router.route('/processRegister').post(async (req, res) => {
         firstName: formData.firstNameInput,
         lastName: formData.lastNameInput,
         email: formData.emailInput,
-        password: formData.passwordInput
+        firstPassword: formData.firstPasswordInput,
+        secondPassword: formData.secondPasswordInput
     };
     
     // Validate the form inputs
-    const errors = helpers. validateUserInfo(newUserInputs);
+    const errors = helpers.validateUserInfo(newUserInputs);
 
     // See if there are any errorss
     if (errors.length > 0) {
         try {
-            res.render('../views/register', {
+            res.render('register', {
                 title: 'Sign Up',
                 hasErrors: true,
                 inputs: newUserInputs,
@@ -71,22 +73,23 @@ router.route('/processRegister').post(async (req, res) => {
             newUserInputs.firstName, 
             newUserInputs.lastName,
             newUserInputs.email,
-            newUserInputs.password
+            newUserInputs.firstPassword
         );
-
-        console.log(newUser);
     } catch (e) {
         // Format and send error response
-        const errorAttrs = helpers.formatError(e);
-        return res.status(errorAttrs.status).json({error: errorAttrs.message});
+        res.render('register', {
+            title: 'Sign Up',
+            hasErrors: true,
+            inputs: newUserInputs,
+            errors: [e[1]]
+        });
+
+        return;
     }
 
     // Redirect to the login screen
     try {
-        res.render('../views/login', {
-            title: 'Log In',
-            errors: []
-        });
+        res.redirect('/');
     } catch (e) {
         // Format and send error response
         const errorAttrs = helpers.formatError(e);

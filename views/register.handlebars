@@ -7,7 +7,7 @@
             Welcome! Please register your new account below!
         </p>
 
-        <!-- Render Errors -->
+        <!-- Render Server Errors -->
         {{#if hasErrors}}
         <ul class="errorList" id="errorList">
             {{#each errors}}
@@ -18,6 +18,11 @@
         </ul>
         {{/if}}
         <div id="errorContainer"></div>
+
+        <!-- Render Client Errors -->
+        <div id="clientErrors" hidden>
+            <ul class="clientErrorList"></ul>
+        </div>
 
         <!-- Login Form -->
         <form action="/register/processRegister" method="POST" class="registerForm">
@@ -30,14 +35,17 @@
             <input type="text" name="firstNameInput" id="firstNameInput" placeholder="John" value="{{inputs.firstName}}" required><br>
 
             <label for="lastNameInput">Last Name</label><br>
-            <input type="text" name="lastNameInput" id="lastNameInput" placeholder="Doe" value="{{inputs.lastName}}"><br>
+            <input type="text" name="lastNameInput" id="lastNameInput" placeholder="Doe" value="{{inputs.lastName}}" required><br>
 
             <!-- Password Input -->
-            <label for="passwordInput">Password</label><br>
-            <input type="password" name="passwordInput" id="passwordInput" value="{{inputs.password}}" required><br>
+            <label for="firstPasswordInput">Password</label><br>
+            <input type="password" name="firstPasswordInput" id="firstPasswordInput" value="{{inputs.firstPassword}}" required><br>
+
+            <label for="secondPasswordInput">Password</label><br>
+            <input type="password" name="secondPasswordInput" id="secondPasswordInput" value="{{inputs.secondPassword}}" required><br>
 
             <!-- Submit -->
-            <input type="submit" id="registerSubmit">
+            <input type="submit" id="registerFormSubmit">
         </form>
         <!-- Register New User --> 
         <a class="register-login-swap-button" href="/">Already Have An Account? Login Here!</a>
