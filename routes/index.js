@@ -22,11 +22,11 @@ const constructorMethod = (app) => {
     app.use('/paychecks', paycheckRoutes);
     app.use('/dashboard', dashboardRoutes);
     
-    // // Set the default route
-    // app.use('*', (req, res) => {
-    //     // Send a 404
-    //     res.status(404).json({error: 'Page does not exist'});
-    // });
+    // Set the default route
+    app.use('*', (req, res) => {
+        // Send a 404
+        res.status(404).json({error: 'Page does not exist'});
+    });
 };
 
 // Export the constructor

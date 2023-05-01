@@ -165,7 +165,8 @@ const validateUserInfo = (userInfo) => {
         firstName: userInfo.firstName,
         lastName: userInfo.lastName,
         email: userInfo.email,
-        password: userInfo.password
+        firstPassword: userInfo.firstPassword,
+        secondPassword: userInfo.secondPassword
     };
 
     // Init errors
@@ -186,10 +187,17 @@ const validateUserInfo = (userInfo) => {
         }
     }
 
-    // Validate the password parameter
+    // Validate the password parameters
     try {
-        const passwordErrors = validatePassword('User Password', newUserInputs.password);
+        const passwordErrors = validatePassword('User Password', newUserInputs.firstPassword);
         errors = errors.concat(passwordErrors);
+    } catch (e) {
+        errors.concat(e);
+    }
+
+    try {
+        const confirmPasswordErrors = validatePassword('Confirm Password', newUserInputs.secondPassword);
+        errors = errors.concat(confirmPasswordErrors);
     } catch (e) {
         errors.concat(e);
     }
