@@ -33,6 +33,51 @@ app.use(session({
     }
 }));
 
+
+
+/* Middleware Functions */
+
+// Route Logging Middleware
+app.use(async (req, res, next) => {
+    // Exlude the public hits
+    if (!req.originalUrl.startsWith('/public') && req.originalUrl !== '/favicon.ico') {
+        // Determine if user is authed
+        let userAuthed = false;
+        if (req.session.profile) {
+            userAuthed = true;
+        }
+
+        // Log it
+        console.log(`INFO: ${req.method} ${req.originalUrl} - (User Authed: ${userAuthed})`);
+        next();
+    } else {
+        next();
+    }
+});
+
+// Password Reset Check
+app.use(async (req, res, next) => {
+    // Determine if there is an active session
+    if (req.session.profile) {
+       // Determine if the user is not already on the password reset page
+        if (req.originalUrl !== '/recovery/changePassword')  {
+            // Determine if the user is in password reset mode
+            if (req.session.profile.status === 'password-reset') {
+                // Redirect them to the recovery page
+                res.redirect('recovery/changePassword');
+                return;
+            }
+        } 
+    }
+
+    // Continue
+    next();
+});
+
+/* End Middleware Functions */
+
+
+
 // Configure routes
 configRoutes(app);
 

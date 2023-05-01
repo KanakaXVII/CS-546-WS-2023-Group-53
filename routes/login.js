@@ -13,11 +13,13 @@ const router = Router();
 router.route('/').get(async (req, res) => {
     // Try to render the page
     try {
-        res.render('../views/login', {
+        res.render('login', {
             title: 'Login',
             hasErrors: false,
             errors: []
         });
+        
+        // return;
     } catch (e) {
         // Format and send error response
         const errorAttrs = helpers.formatError(e);
@@ -39,13 +41,14 @@ router.route('/processLogin').post(async (req, res) => {
     const user = await userData.getUserByEmail(userLoginInputs.email);
 
     // Validate the response
-    if (!user) {
+    if (!user || user === null) {
         try {
             res.render('../views/login', {
                 title: 'Login',
                 hasErrors: true,
                 errors: ['User not found']
             });
+            return;
         } catch (e) {
             // Format and send error response
             const errorAttrs = helpers.formatError(e);
@@ -64,11 +67,12 @@ router.route('/processLogin').post(async (req, res) => {
 
         req.session.profile = moddedUserProfile;
 
-        // Render the dashboard
-        res.render('../views/dashboard', { // Placeholder view
-            title: 'Dashboard',
-            userProfile: req.session.profile
-        });
+        // // Render the dashboard
+        // res.render('../views/dashboard', { // Placeholder view
+        //     title: 'Dashboard',
+        //     userProfile: req.session.profile
+        // });
+        res.redirect('dashboard'); // This is what it should be when a proper dashboard is set up
     } else {
         try {
             res.render('../views/login', {

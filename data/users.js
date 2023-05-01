@@ -22,7 +22,8 @@ const createUser = async (
         lastName: lastName,
         email: email,
         password: password,
-        paymentMethods: []
+        paymentMethods: [],
+        status: 'active'
     };
 
     // Validate that the email does not already exist in DB
@@ -99,8 +100,7 @@ const getUserByID = async (id) => {
 
     // Search for the target record
     const user = await userCollection.findOne(
-        {_id: obj_id},
-        {projection: {password: 0}}
+        {_id: obj_id}
     );
 
     // Validate the response
@@ -168,7 +168,8 @@ const updateUserByID = async (userID, userUpdates) => {
     );
 
     // Validate the update
-    if (updatedUser.modifiedCount === 0) throw [500, 'Error: User profile could not be updated'];
+    // if (updatedUser.modifiedCount === 0) throw [500, 'Error: User profile could not be updated'];
+    if (updatedUser.modifiedCount === 0) return {message: 'User profile was not updated'};
 
     // Send the response
     return {message: 'Successfully updated user.'};
