@@ -79,8 +79,63 @@ const createPaycheck = async(
     return {status: 200, message: "Successfully added paycheck"};
 };
 
+/*
+    Edit Functions
+    - Edit Paycheck
+*/
+
+const editPaycheck = async(
+    paycheckId,
+    date,
+    amount,
+    notes
+) => {
+    // Mount the paychecks collection
+    const paycheckCollection = await paychecks();
+
+    // Create an updated paycheck object
+    let updatedPaycheck = {
+        date: new Date(date),
+        amount: amount,
+        notes: notes
+    };
+
+    // Update the paycheck in the collection
+    const updateResult = await paycheckCollection.updateOne(
+        { _id: new ObjectId(paycheckId) },
+        { $set: updatedPaycheck }
+    );
+
+    // Validate update action
+    if (updateResult.modifiedCount === 0) throw [500, `Error: Failed to update paycheck with id ${paycheckId}`];
+
+    // Return the results
+    return { status: 200, message: "Successfully updated paycheck" };
+};
+
+/*
+    Delete Functions
+    - Delete Paycheck
+*/
+
+const deletePaycheck = async(paycheckId) => {
+    // Mount the paychecks collection
+    const paycheckCollection = await paychecks();
+
+    // Delete the paycheck from the collection
+    const deleteResult = await paycheckCollection.deleteOne({ _id: new ObjectId(paycheckId) });
+
+    // Validate delete action
+    if (deleteResult.deletedCount === 0) throw [500, `Error: Failed to delete paycheck with id ${paycheckId}`];
+
+  // Return the results
+    return { status: 200, message: "Successfully deleted paycheck" };
+};
+
 // Export Functions
 export default {
     getPaychecksByUserId,
-    createPaycheck
+    createPaycheck,
+    editPaycheck,
+    deletePaycheck
 };
