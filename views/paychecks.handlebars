@@ -34,6 +34,10 @@
             <td>{{ this.date }}</td>
             <td>${{ this.amount }}</td>
             <td>{{ this.notes }}</td>
+            <td>
+                <button class="edit-btn" data-id="{{ this._id }}">Edit</button>
+                <button class="delete-btn" data-id="{{ this._id }}">Delete</button>
+            </td>
         </tr>
         {{/each}}
     </table>
