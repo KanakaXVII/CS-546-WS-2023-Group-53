@@ -59,6 +59,37 @@ router
 
         res.redirect('/paychecks');
     });
+    
+router
+    .route('/edit/:id')
+    .put(async (req, res) => {
+        // Get the request body and path params
+        const paycheckInfo = req.body;
+        const paycheckId = req.params.id;
+
+        // Perform DB operation
+        const updatedPaycheck = await paycheckData.updatePaycheck(
+            paycheckId,
+            paycheckInfo.checkDateInput,
+            paycheckInfo.checkAmountInput,
+            paycheckInfo.checkNotesInput
+        );
+
+        res.json(updatedPaycheck);
+    });
+
+router
+    .route('/delete/:id')
+    .delete(async (req, res) => {
+        // Get the path params
+        const paycheckId = req.params.id;
+
+        // Perform DB operation
+        const deletedPaycheck = await paycheckData.deletePaycheck(paycheckId);
+
+        res.json(deletedPaycheck);
+    });
+
 
 // Export the router
 export default router;
