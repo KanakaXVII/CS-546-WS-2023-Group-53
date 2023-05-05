@@ -26,12 +26,20 @@ router
         } else {
             hasPaychecks = true;
         }
-        
+
+        // Determine if there are any query path parameters to render
+        let hasErrors = false;
+        let errorMessage = undefined;
+        if (Object.keys(req.query).length > 0) {
+            hasErrors = req.query.hasErrors;
+            errorMessage = req.query.errorMessage;
+        }
+                
         // Render paycheck data
-        res.render('../views/paychecks', {
+        res.render('paychecks', {
             title: 'Paychecks',
-            hasErrors: false,
-            errors: [],
+            hasErrors: hasErrors,
+            errorMessage: errorMessage,
             userId: userId,
             hasPaychecks: hasPaychecks,
             paychecks: paycheckRecords
@@ -58,6 +66,25 @@ router
         );
 
         res.redirect('/paychecks');
+    })
+
+router
+    .route('/paycheck/:id')
+    .delete(async (req, res) => {
+        // Get the request body params
+        const paycheckID = req.params.id;
+        
+        // Perform DB operation to delete it
+        try {
+            const deletedPaycheck = await paycheckData.deletePaycheckByID(paycheckID);
+        } catch (e) {
+            res.redirect(`/paychecks?hasErrors=true&errorMessage=${e}`);
+            return;
+        }
+
+        // Redirect back to the paychecks page
+        res.redirect('/paychecks');
+        return;
     });
 
 // Export the router

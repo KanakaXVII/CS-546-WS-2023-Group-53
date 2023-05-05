@@ -7,6 +7,7 @@ import * as helpers from '../helpers.js';
 /*
     Get Functions
     - Get All Paychecks by User ID
+    - Get Paycheck by Paycheck ID
 */
 
 const getPaychecksByUserId = async(userId) => {
@@ -26,7 +27,6 @@ const getPaychecksByUserId = async(userId) => {
     // Mount the paychecks collection
     const paycheckCollection = await paychecks();
 
-
     // Search for records with the user ID
     const userPaychecks = await paycheckCollection.find({'userId': new ObjectId(userId)}).toArray();
 
@@ -34,6 +34,19 @@ const getPaychecksByUserId = async(userId) => {
     return userPaychecks;
 };
 
+const getPaycheckByID = async (paycheckID) => {
+    // Mount the paychecks collection
+    const paycheckCollection = await paychecks();
+
+    // Search for records with the paycheck ID
+    const paycheck = await paycheckCollection.findOne({_id: new ObjectId(paycheckID)});
+
+    // Validate the response
+    if (!paycheck) throw 'Paycheck not found';
+
+    // Return the results
+    return paycheck;
+};
 
 /*
     Create Functions
@@ -79,8 +92,34 @@ const createPaycheck = async(
     return {status: 200, message: "Successfully added paycheck"};
 };
 
+// Delete Paycheck by ID
+const deletePaycheckByID = async(paycheckID) => {
+    // Validate that the paycheck exists
+    let paycheck = undefined;
+    paycheck = await getPaycheckByID(paycheckID);
+
+    // Mount the paycheck collection
+    const paycheckCollection = await paychecks();
+
+    // Delete Paycheck
+    let deleteOperation = undefined;
+    try {
+        deleteOperation = await paycheckCollection.deleteOne({_id: new ObjectId(paycheckID)});
+    } catch (e) {
+        throw e;
+    }
+
+    // Valdiate deletion
+    if (deleteOperation.deletedCount === 0) throw 'Could not delete paycheck';
+
+    // Return success message
+    return {message: 'Successfully deleted paycheck'};
+}
+
 // Export Functions
 export default {
     getPaychecksByUserId,
-    createPaycheck
+    getPaycheckByID,
+    createPaycheck,
+    deletePaycheckByID
 };
