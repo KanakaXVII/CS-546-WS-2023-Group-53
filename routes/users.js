@@ -245,9 +245,7 @@ router
         try {
             // Validate the ID values
             helpers.validateObjectId('Pay Method ID', payId);
-            console.log('1');
             helpers.validateObjectId('User ID', userId);
-            console.log('2');
 
             // Validate the new name
             helpers.validateString('New Pay Method Name', newName);
