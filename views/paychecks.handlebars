@@ -39,9 +39,12 @@
             <td>{{ this.date }}</td>
             <td>${{ this.amount }}</td>
             <td>{{ this.notes }}</td>
-            <td><a href='/paychecks/paycheck/{{this._id}}?realMethod=DELETE' class="deletePaycheckButton" id="paycheck_{{this._id}}">Delete</a></td>
+            <td><a href='/paychecks/paycheck/{{userProfile._id}}?realMethod=DELETE' class="deletePaycheckButton" id="paycheck_{{this._id}}">Delete</a></td>
         </tr>
         {{/each}}
     </table>
     {{/if}}
+
+    <!-- Back Button -->
+    <a href="/dashboard">Back</a>
 </main>

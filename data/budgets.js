@@ -83,6 +83,12 @@ const update = async (id, budgetUpdates) => {
   return await get(id);
 };
 
+/*
+  Delete Functions:
+  - Remove...Get clarity on this one
+  - Delete All Budgets for User
+*/
+
 // Delete Budget
 const remove = async (id) => {
   const budgetCollection = await budgets();
@@ -96,10 +102,33 @@ const remove = async (id) => {
   return true;
 };
 
+// Delete All User Budgets
+const deleteAllUserBudgets = async (userId) => {
+  // Mount the budgets collection
+  const budgetCollection = await budgets();
+
+  // Delete many by User ID
+  let deleteOperation = undefined;
+  try {
+    deleteOperation = await budgetCollection.deleteMany({userId: new ObjectId(userId)});
+  } catch (e) {
+    throw e;
+  }
+
+  // Validate deletion
+  if (deleteOperation.deletedCount === 0) {
+    return 'No budgets found for user';
+  }
+
+  // Return success message
+  return `Successfully deleted ${deleteOperations.deletedCount} budgets`;
+};
+
 // Export functions
 export default {
   create,
   get,
   update,
   remove,
+  deleteAllUserBudgets
 };

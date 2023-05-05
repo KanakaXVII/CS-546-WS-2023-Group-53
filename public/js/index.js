@@ -185,3 +185,20 @@ $('#registerFormSubmit').on('click', async (event) => {
       $('.registerForm').submit();
     }
 });
+
+// Allow the user to confirm that they actually want to delete their user
+$('#deleteProfileButton').on('click', async (event) => {
+    // Prevent the default action
+    event.preventDefault();
+
+    // Grab the link
+    const next = $('#deleteProfileButton').attr('href');
+    console.log(next);
+
+    // Offer a confirmation prompt
+    if (window.confirm('Are you sure you want to delete your profile? This is permanent and data cannot be recovered...')) {
+        window.location.href = next;
+    } else {
+        location.reload();
+    }
+});

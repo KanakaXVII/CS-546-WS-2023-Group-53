@@ -76,8 +76,36 @@ const get = async (id) => {
     return transaction;
 };
 
+/* 
+    Delete Functions:
+    - Delete All Transactions for User
+*/
+
+// Delete All User Transactions
+const deleteAllUserTransactions = async (userId) => {
+    // Mount the transactions collection
+    const transactionCollection = await transactions();
+
+    // Delete many by User ID
+    let deleteOperation = undefined;
+    try {
+        deleteOperation = await transactionCollection.deleteMany({userId: new ObjectId(userId)});
+    } catch (e) {
+        throw e;
+    }
+
+    // Validate deletion
+    if (deleteOperation.deletedCount === 0) {
+        return 'No transactions found for user';
+    }
+
+    // Return success message
+    return `Successfully deleted ${deleteOperations.deletedCount} transactions`;
+};
+
 export default {
     create,
     getAllByUserId,
-    get
+    get,
+    deleteAllUserTransactions
 };
