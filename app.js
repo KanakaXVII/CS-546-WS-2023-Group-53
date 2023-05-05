@@ -78,6 +78,7 @@ app.use(async (req, res, next) => {
 app.use(async (req, res, next) => {
     // Include login and registration pages
     if (req.originalUrl === '/login' || req.originalUrl === '/register' || req.originalUrl === '/login/processLogin' || req.originalUrl === '/register/processRegister') {
+
         // Check is user is authed
         if (req.session.profile) {
             // Log action
@@ -128,6 +129,25 @@ app.use('/paychecks/paycheck/:id', async (req, res, next) => {
 });
 
 app.delete('/paychecks/paycheck/:id', async (req, res, next) => {
+    next();
+});
+
+// Check for user deletion via button
+app.use('/users/:id', async (req, res, next) => {
+    // Check to see if there is a parameter in the URL
+    if (req.query) {
+        // Check if the query is for a DELETE method
+        if (req.query.realMethod === 'DELETE') {
+            // Change the request method to a DELETE method
+            req.method = 'DELETE';
+        }
+    }
+
+    // Continue
+    next();
+});
+
+app.delete('/users/:id', async (req, res, next) => {
     next();
 });
 

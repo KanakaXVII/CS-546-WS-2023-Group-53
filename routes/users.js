@@ -1,6 +1,6 @@
 // Imports
 import { Router } from 'express';
-import { userData } from '../data/index.js';
+import { userData, paycheckData, transactionData, budgetData } from '../data/index.js';
 import * as helpers from '../helpers.js';
 
 // Create a router
@@ -115,8 +115,7 @@ router
         
     .delete(async (req, res) => {
         // Get the ID param
-        const userID = req.params.id;
-        
+        const userID = req.params.id;        
 
         // Validate the input
         try {
@@ -128,18 +127,53 @@ router
             return res.status(errorAttrs.status).json({error: errorAttrs.message});
         }
 
-        // Try to delete the user
-        try {
-            // Call the data function
-            const deletedUser = await userData.deleteUserByID(userID);
+        // Init storage for errors
+        let errors = [];
 
-            // Show the response
-            res.json(deletedUser);
+        // Delete all records associated with the user
+        let deleteOperations = {};
+        try {
+            deleteOperations['paychecks'] = await paycheckData.deleteAllUserPaychecks(userID);
         } catch (e) {
-            // Format and send error response
-            const errorAttrs = helpers.formatError(e);
-            return res.status(errorAttrs.status).json({error: errorAttrs.message});
+            errors.push(e);
         }
+
+        try {
+            deleteOperations['transactions'] = await transactionData.deleteAllUserTransactions(userID);
+        } catch (e) {
+            errors.push(e);
+        }
+
+        try {
+            deleteOperations['budgets'] = await budgetData.deleteAllUserBudgets(userID);
+        } catch (e) {
+            errors.push(e);
+        }
+
+        // Delete the user
+        try {
+            deleteOperations['user'] = await userData.deleteUserByID(userID);
+        } catch (e) {
+            errors.push(e);
+        }
+
+        // Check if there are any errors
+        if (errors.length > 0) {
+            res.render('profile', {
+                title: 'Profile',
+                profile: req.session.profile,
+                errors: errors,
+                hasErrors: true
+            });
+
+            return;
+        }
+
+        // Remove the profile from session
+        req.session.profile = undefined;
+
+        // Redirect to the login page
+        res.redirect('/');
     });
 
 router

@@ -92,6 +92,12 @@ const createPaycheck = async(
     return {status: 200, message: "Successfully added paycheck"};
 };
 
+/*
+    Delete Functions:
+    - Delete Paycheck by ID
+    - Delete All Paychecks for User
+*/
+
 // Delete Paycheck by ID
 const deletePaycheckByID = async(paycheckID) => {
     // Validate that the paycheck exists
@@ -116,10 +122,33 @@ const deletePaycheckByID = async(paycheckID) => {
     return {message: 'Successfully deleted paycheck'};
 }
 
+// Delete All User Paychecks
+const deleteAllUserPaychecks = async (userId) => {
+    // Mount the paycheck collection
+    const paycheckCollection = await paychecks();
+
+    // Delete many by User ID
+    let deleteOperation = undefined;
+    try {
+        deleteOperation = await paycheckCollection.deleteMany({userId: new ObjectId(userId)});
+    } catch (e) {
+        throw e;
+    }
+
+    // Validate deletion
+    if (deleteOperation.deletedCount === 0) {
+        return `No paychecks found for user`;
+    }
+
+    // Return success message
+    return `Successfully deleted ${deleteOperation.deletedCount} paychecks`;
+}
+
 // Export Functions
 export default {
     getPaychecksByUserId,
     getPaycheckByID,
     createPaycheck,
-    deletePaycheckByID
+    deletePaycheckByID,
+    deleteAllUserPaychecks
 };
