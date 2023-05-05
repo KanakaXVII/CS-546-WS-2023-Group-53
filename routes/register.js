@@ -89,7 +89,7 @@ router.route('/processRegister').post(async (req, res) => {
 
     // Redirect to the login screen
     try {
-        res.redirect('/');
+        res.redirect('/login');
     } catch (e) {
         // Format and send error response
         const errorAttrs = helpers.formatError(e);

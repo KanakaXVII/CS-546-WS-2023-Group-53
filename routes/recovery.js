@@ -73,7 +73,7 @@ router.post('/reset-password', async (req, res) => {
   }
 
   // If everything is successful, redirect back to the login page
-  res.redirect('login');
+  res.redirect('/login');
   return;
 });
 

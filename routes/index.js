@@ -12,7 +12,7 @@ import dashboardRoutes from './dashboard.js';
 // Build a constructor to glue routes together
 const constructorMethod = (app) => {
     // Configure the app to use all routes --> app.use('/<route>', <importedFile>);
-    app.use('/', loginRoutes);
+    app.use('/login', loginRoutes);
     app.use('/recovery', recoveryRoutes);
     app.use('/register', registerRoutes);
     app.use('/profile', profileRoutes);

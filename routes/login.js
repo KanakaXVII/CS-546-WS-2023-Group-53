@@ -43,7 +43,7 @@ router.route('/processLogin').post(async (req, res) => {
     // Validate the response
     if (!user || user === null) {
         try {
-            res.render('../views/login', {
+            res.render('login', {
                 title: 'Login',
                 hasErrors: true,
                 errors: ['User not found']
@@ -72,10 +72,10 @@ router.route('/processLogin').post(async (req, res) => {
         //     title: 'Dashboard',
         //     userProfile: req.session.profile
         // });
-        res.redirect('dashboard'); // This is what it should be when a proper dashboard is set up
+        res.redirect('/dashboard'); // This is what it should be when a proper dashboard is set up
     } else {
         try {
-            res.render('../views/login', {
+            res.render('login', {
                 title: 'Login',
                 hasErrors: true,
                 errors: ['Password is Incorrect']
