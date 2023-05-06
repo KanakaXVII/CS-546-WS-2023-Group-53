@@ -8,6 +8,7 @@ import recoveryRoutes from './recovery.js';
 import profileRoutes from './profile.js';
 import paycheckRoutes from './paychecks.js';
 import dashboardRoutes from './dashboard.js';
+import logoutRoutes from './logout.js';
 
 // Build a constructor to glue routes together
 const constructorMethod = (app) => {
@@ -21,6 +22,7 @@ const constructorMethod = (app) => {
     app.use('/budgets', budgetRoutes);
     app.use('/paychecks', paycheckRoutes);
     app.use('/dashboard', dashboardRoutes);
+    app.use('/logout', logoutRoutes);
     
     // Set the default route
     app.use('*', (req, res) => {
