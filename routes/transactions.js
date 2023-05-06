@@ -29,21 +29,21 @@ router
             }
 
             // Determine if there are any query path parameters to render
-            // let hasErrors = false;
-            // let errorMessage = undefined;
+            let hasErrors = false;
+            let errorMessage = undefined;
 
-            // if (Object.keys(req.query).length > 0) {
-            //     hasErrors = req.query.hasErrors;
-            //     errorMessage = req.query.errorMessage;
-            // }
+            if (Object.keys(req.query).length > 0) {
+                hasErrors = req.query.hasErrors;
+                errorMessage = req.query.errorMessage;
+            }
 
 
 
             // Send the results back
             res.render('addTransaction', {
                 title: 'Add Transactions',
-                // hasErrors: hasErrors,
-                // errorMessage: errorMessage,
+                hasErrors: hasErrors,
+                errorMessage: errorMessage,
                 userId: userId,
                 hasTransactions: hasTransactions,
                 transactions: transactions
@@ -101,7 +101,7 @@ router
     //         return res.status(errorAttrs.status).json({ error: errorAttrs.message });
     //     }
     // })
-    
+
     .post(async (req, res) => {
 
         // Get the request body
@@ -183,5 +183,28 @@ router
             return res.status(errorAttrs.status).json({ error: errorAttrs.message });
         }
     });
+
+    router.route('/transaction/:id').post(async (req, res) => {
+
+        if(req.query.method === 'DELETE'){
+       
+        const transactionId = req.params.id;
+
+        // Delete the transaction from the database
+        try{
+            const deletedTransaction = await transactionData.deleteTransactionByID(transactionId);
+        }catch(e){
+            res.redirect(`/transactions?hasErrors=true&errorMessage=${e}`);
+            return
+        }
+
+        res.redirect('/transactions');
+        return
+    }
+    else{
+        return res.status(400).json({ error: 'There are no fields in the request body.' });
+    }
+    });
+
 
 export default router;

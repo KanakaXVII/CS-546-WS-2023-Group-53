@@ -47,7 +47,7 @@ const create = async (
    
 
     // Validate insert action
-    // if (!newTransactionInsertInformation.insertedId) throw [500, 'Error: Failed to insert transaction'];
+    if (!newTransactionInsertInformation.insertedId) throw [500, 'Error: Failed to insert transaction'];
 
     // Get the new record
     
@@ -79,12 +79,11 @@ const getAllByUserId = async (userId) => {
     const userTransactions = await transactionCollection.find(
         { 'userId': new ObjectId(userId) }
     ).toArray();
-    console.log("Displaying user transactions");
 
     
 
     // Validate the response
-    // if (!userTransactions) throw [404, `Error: Transactions not found`];
+    if (!userTransactions) throw [404, `Error: Transactions not found`];
 
     // Return results
     return userTransactions;
@@ -137,9 +136,37 @@ const deleteAllUserTransactions = async (userId) => {
     return `Successfully deleted ${deleteOperations.deletedCount} transactions`;
 };
 
+const deleteTransactionByID = async (transactionID) => {
+    // Validate that the transaction exists
+    // let transaction = undefined;
+    // transaction = await getTransactionByID(transactionID);
+
+    // Mount the transaction collection
+    const transactionCollection = await transactions();
+
+    // Delete transaction
+    let deleteOperation = undefined;
+    try {
+        deleteOperation = await transactionCollection.deleteOne({_id: new ObjectId(transactionID)});
+    } catch (e) {
+        throw e;
+    }
+
+    // Valdiate deletion
+    if (deleteOperation.deletedCount === 0) throw 'Could not delete transaction';
+
+    // Return success message
+    return {message: 'Successfully deleted transaction'};
+};
+
+
+
+
+
 export default {
     create,
     getAllByUserId,
     get,
-    deleteAllUserTransactions
+    deleteAllUserTransactions,
+    deleteTransactionByID
 };
