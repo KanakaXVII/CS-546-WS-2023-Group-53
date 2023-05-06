@@ -1,6 +1,7 @@
 import { transactions } from '../config/mongoCollections.js';
 import { ObjectId } from 'mongodb';
 import * as helpers from '../helpers.js';
+import { userData } from '../data/index.js';
 
 const create = async (
     userId,
@@ -10,50 +11,83 @@ const create = async (
     amount,
     category
 ) => {
+
+    let user = undefined;
+
+    try {
+        user = await userData.getUserByID(userId);
+    } catch (e) {
+        throw [500, e];
+    }
+
+    if (!user || user === undefined) {
+        throw [404, "User not found"];
+    }
+
     // Create a new object
+    
+
+    // Get the DB collection
+    const transactionCollection = await transactions();
+
     let transactionInfo = {
-        userId: userId,
-        date: date,
+        userId: new ObjectId(userId),
+        date: new Date(date),
         method: method,
         expenseName: expenseName,
         amount: amount,
         category: category
     };
 
-    // Get the DB collection
-    const transactionCollection = await transactions();
+    
 
     // Write to DB
     const newTransactionInsertInformation = await transactionCollection.insertOne(transactionInfo);
 
+   
+
     // Validate insert action
-    if (!newTransactionInsertInformation.insertedId) throw [500, 'Error: Failed to insert transaction'];
+    // if (!newTransactionInsertInformation.insertedId) throw [500, 'Error: Failed to insert transaction'];
 
     // Get the new record
-    const newInsertedTransaction = await get(newTransactionInsertInformation.insertedId.toString());
+    
 
     // Return the results
-    return newInsertedTransaction;
+    return {status: 200, message: "Successfully added transaction"};
 };
 
 const getAllByUserId = async (userId) => {
+
+    let user = undefined;
+
+    try {
+        user = await userData.getUserByID(userId);
+    } catch (e) {
+        throw [500, e];
+    }
+
+    if (!user || user === undefined) {
+        throw [404, "User not found"];
+    }
+
     // Get the DB collection
     const transactionCollection = await transactions();
 
     // Convert the ID to an object ID
-    const obj_id = new ObjectId(userId);
 
     // Search for the target records
-    const transactions = await transactionCollection.find(
-        { userId: obj_id },
-        { projection: { userId: 0 } }
+    const userTransactions = await transactionCollection.find(
+        { 'userId': new ObjectId(userId) }
     ).toArray();
+    console.log("Displaying user transactions");
+
+    
 
     // Validate the response
-    if (!transactions) throw [404, `Error: Transactions not found`];
+    // if (!userTransactions) throw [404, `Error: Transactions not found`];
 
     // Return results
-    return transactions;
+    return userTransactions;
 };
 
 const get = async (id) => {

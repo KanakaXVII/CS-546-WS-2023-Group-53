@@ -7,21 +7,107 @@ const router = Router();
 router
     .route('/')
     .get(async (req, res) => {
-        try {
+        
             // Get transactions for the logged in user
-            const transactions = await transactionData.getAllByUserId(req.user._id.toString());
+            // const transactions = await transactionData.getAllByUserId(req.user._id.toString());
+
+            const userId = req.session.profile._id;
+
+            // Perform DB operation to get transactions data
+            const transactions = await transactionData.getAllByUserId(
+                userId
+            );
+
+        
+            // Determine if there are transactions to render
+            let hasTransactions = undefined;
+
+            if (transactions.length === 0) {
+                hasTransactions = false;
+            } else {
+                hasTransactions = true;
+            }
+
+            // Determine if there are any query path parameters to render
+            // let hasErrors = false;
+            // let errorMessage = undefined;
+
+            // if (Object.keys(req.query).length > 0) {
+            //     hasErrors = req.query.hasErrors;
+            //     errorMessage = req.query.errorMessage;
+            // }
+
+
 
             // Send the results back
-            res.json(transactions);
-        } catch (e) {
-            // Format and send error response
-            const errorAttrs = helpers.formatError(e);
-            return res.status(errorAttrs.status).json({ error: errorAttrs.message });
-        }
+            res.render('addTransaction', {
+                title: 'Add Transactions',
+                // hasErrors: hasErrors,
+                // errorMessage: errorMessage,
+                userId: userId,
+                hasTransactions: hasTransactions,
+                transactions: transactions
+            });
+
     })
+    // .post(async (req, res) => {
+    //     // Get the request body
+    //     const transactionInfo = req.body;
+
+    //     // Validate params were passed
+    //     if (!transactionInfo || Object.keys(transactionInfo).length === 0) {
+    //         return res.status(400).json({ error: 'There are no fields in the request body.' });
+    //     }
+
+    //     // Add new transaction to DB
+    //     try {
+    //         // Call the data function
+    //         console.log(req.user._id.toString());
+    //         const newTransaction = await transactionData.create(
+    //             req.user._id.toString(),
+    //             transactionInfo.date,
+    //             transactionInfo.method,
+    //             transactionInfo.expenseName,
+    //             transactionInfo.amount,
+    //             transactionInfo.category
+    //         );
+
+    //         // Send the results back
+    //         res.json(newTransaction);
+    //     } catch (e) {
+    //         // Format and send error response
+    //         const errorAttrs = helpers.formatError(e);
+    //         return res.status(errorAttrs.status).json({ error: errorAttrs.message });
+    //     }
+    // });
+
+router
+    .route('/:id')
+    // .get(async (req, res) => {
+    //     try {
+    //         // Get the transaction with the specified ID
+    //         const transaction = await transactionData.get(req.params.id);
+
+    //         // Validate that the transaction belongs to the logged in user
+    //         if (transaction.userId !== req.user._id.toString()) {
+    //             throw [403, `Error: Transaction does not belong to logged in user`];
+    //         }
+
+    //         // Send the results back
+    //         res.json(transaction);
+    //     } catch (e) {
+    //         // Format and send error response
+    //         const errorAttrs = helpers.formatError(e);
+    //         return res.status(errorAttrs.status).json({ error: errorAttrs.message });
+    //     }
+    // })
+    
     .post(async (req, res) => {
+
         // Get the request body
         const transactionInfo = req.body;
+        const userId = req.params.id;
+
 
         // Validate params were passed
         if (!transactionInfo || Object.keys(transactionInfo).length === 0) {
@@ -29,45 +115,16 @@ router
         }
 
         // Add new transaction to DB
-        try {
-            // Call the data function
-            const newTransaction = await transactionData.create(
-                req.user._id.toString(),
-                transactionInfo.date,
-                transactionInfo.method,
-                transactionInfo.expenseName,
-                transactionInfo.amount,
-                transactionInfo.category
-            );
+        const newTransaction = await transactionData.create(
+            userId,
+            transactionInfo.dateInput,
+            transactionInfo.methodInput,
+            transactionInfo.expenseNameInput,
+            transactionInfo.amountInput,
+            transactionInfo.categoryInput
+        );
 
-            // Send the results back
-            res.json(newTransaction);
-        } catch (e) {
-            // Format and send error response
-            const errorAttrs = helpers.formatError(e);
-            return res.status(errorAttrs.status).json({ error: errorAttrs.message });
-        }
-    });
-
-router
-    .route('/:id')
-    .get(async (req, res) => {
-        try {
-            // Get the transaction with the specified ID
-            const transaction = await transactionData.get(req.params.id);
-
-            // Validate that the transaction belongs to the logged in user
-            if (transaction.userId !== req.user._id.toString()) {
-                throw [403, `Error: Transaction does not belong to logged in user`];
-            }
-
-            // Send the results back
-            res.json(transaction);
-        } catch (e) {
-            // Format and send error response
-            const errorAttrs = helpers.formatError(e);
-            return res.status(errorAttrs.status).json({ error: errorAttrs.message });
-        }
+        res.redirect('/transactions');
     })
     .put(async (req, res) => {
         // Get the request body
