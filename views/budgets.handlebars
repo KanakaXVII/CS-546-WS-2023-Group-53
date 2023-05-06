@@ -1,0 +1,72 @@
+<main>
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="/dashboard" class="navbarElement">Dashboard</a>
+        <a href="/profile" class="navbarElement">Profile</a>
+        <a href="/paychecks" class="navbarElement">Paychecks</a>
+        <a href="/transactions" class="navbarElement">Transactions</a>
+        <a href="/budgets" class="navbarElement" id="currentNavbarLink">Budgets</a>
+        <a href="/logout" class="navbarElement">Logout</a>
+    </div>
+    
+    <div class="budgetPage">
+        <h1>{{ title }}</h1>
+        
+        <!-- Description -->
+        <h2>Add Budget</h2>
+
+        <!-- Render Server Errors -->
+        {{#if hasErrors}}
+        <p class="errorMessage">{{ errorMessage }}</p>
+        {{/if}}
+
+        <!-- Render Client Errors -->
+        <div class="clientSideErrors" hidden></div>
+
+        <!-- Add Budget Form -->
+        <form action="/budgets" method="POST" class="addBudgetForm">
+            <!-- Month/Year Input -->
+            <label for="monthYearInput">Month</label><br>
+            <input type="month" name="monthYearInput" id="monthYearInput" required><br>
+
+            <!-- Budget Category Input -->
+            <label for="budgetNameInput">Budget Category</label><br>
+            <input type="text" name="budgetNameInput" id="budgetNameInput" placeholder="House" required><br>
+
+            <!-- Budgeted Amount Input -->
+            <label for="budgetedAmountInput">Budgeted Amount</label><br>
+            <input type="number" name="budgetedAmountInput" id="budgetedAmountInput" placeholder="1000" required><br>
+
+            <!-- Recurring Checkbox -->
+            <label for="recurringInput">Recurring Budget?</label>
+            <input type="checkbox" name="recurringInput" id="budgetRecurringInput"><br>
+
+            <!-- Submit -->
+            <input type="submit" id="addBudgetSubmit">
+        </form>
+
+        <!-- Render Budgets -->
+        <h2>Existing Budgets</h2>
+        {{#if hasBudgets}}
+        <table>
+            <tr>
+                <th>Month</th>
+                <th>Year</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Recurring</th>
+            </tr>
+            {{#each budgets}}
+            <tr>
+                <td>{{ this.month }}</td>
+                <td>{{ this.year }}</td>
+                <td>{{ this.name }}</td>
+                <td>${{ this.amount }}</td>
+                <td>{{ this.recurring }}</td>
+                <td><a href='/budgets/budget/{{this._id}}?realMethod=DELETE' class="deleteBudgetButton" id="budget_{{this._id}}" />Delete</td>
+            </tr>
+            {{/each}}
+        </table>
+        {{/if}}
+    </div>
+</main>

@@ -10,7 +10,7 @@ const router = Router();
 router
     .route('/')
     .get(async (req, res) => {
-        // Get the request path params
+        // Get the users ID
         const userId = req.session.profile._id;
 
         // Perform DB operation to get paycheck data
@@ -52,10 +52,6 @@ router
         // Get the request body and path params
         const paycheckInfo = req.body;
         const userId = req.params.id;
-
-        // Validate that params were passed
-        
-        // Validate inputs
 
         // Perform DB operation
         const newPaycheck = await paycheckData.createPaycheck(
