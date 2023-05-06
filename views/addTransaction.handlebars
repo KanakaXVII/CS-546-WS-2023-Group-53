@@ -12,12 +12,16 @@
     <div class="transactionPage">
         <h1>{{title}}</h1>
 
+        {{!-- {{#if hasErrors}}
+        <p class="errorMessage">{{errorMessage}}</p>
+        {{/if}} --}}
+
         <p>
             Add a new transaction
         </p>
 
         <!-- Transaction Form -->
-        <form action="/transactions/add" method="POST" class="transactionForm">
+        <form action="/transactions/{{userId}}" method="POST" class="transactionForm">
             <!-- Date Input -->
             <label for="dateInput">Date</label><br>
             <input type="date" name="dateInput" id="dateInput" required><br>
@@ -46,5 +50,34 @@
             <!-- Submit -->
             <input type="submit" id="transactionSubmit">
         </form>
+
+        <h2>Transaction History</h2>
+    {{#if hasTransactions}}
+    <table>
+        <tr>
+            <th>Date</th>
+          <th>Method</th>
+          <th>Expense Name</th>
+          <th>Amount</th>
+          <th>Category</th>
+        </tr>
+        {{#each transactions}}
+        <tr>
+            <tr>
+            <td>{{this.date}}</td>
+            <td>{{this.method}}</td>
+            <td>{{this.expenseName}}</td>
+            <td>{{this.amount}}</td>
+            <td>{{this.category}}</td>
+          </tr>
+        </tr>
+        {{/each}}
+    </table>
+    {{/if}}
+
+    <!-- Back Button -->
+    <a href="/dashboard">Back</a>
+
+
     </div>
 </main>
