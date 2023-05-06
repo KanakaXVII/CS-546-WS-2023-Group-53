@@ -36,22 +36,39 @@ const validatePassword = async (password) => {
 };
 
 // Valdiate name inputs
-const validateName = async (name) => {
+const validateStr = async (varName, varVal) => {
     // Init storage for errors
     let errors = [];
 
     // Make sure name is not empty
-    if (name.trim().length === 0) {
-        errors.push('Name must not be empty space');
+    if (varVal.trim().length === 0) {
+        errors.push(`${varName} must not be empty space`);
     }
 
     // Make sure name consists of only letters
-    const letterPattern = /[a-zA-Z]/;
-    if (!letterPattern.test(name)) {
-        errors.push('Name must consist of only letters');
+    const letterPattern = /^[a-zA-Z]+$/;
+    if (!letterPattern.test(varVal)) {
+        errors.push(`${varName} must consist of only letters`);
     }
 
     return errors;
+};
+
+const validateYear = async (year) => {
+    // Init storage for errors
+    let errors = [];
+
+    // Convert value to number
+    year = Number(year);
+
+    // Make sure the year is within legal bounds
+    const currentYear = new Date().getFullYear();
+    
+    if (year > currentYear + 100 || year < currentYear) {
+        errors.push('Year must be between this year and 100 years from now');
+    }
+
+
 };
 
 // Validate email inputs
@@ -135,14 +152,14 @@ $('#registerFormSubmit').on('click', async (event) => {
     }
 
     // Validate the name parameters
-    const firstNameErrors = await validateName($('#firstNameInput').val());
+    const firstNameErrors = await validateStr($('#firstNameInput').val());
     if (firstNameErrors.length > 0) {
         firstNameErrors.forEach((error) => {
             masterErrorList.push(error);
         });
     }
 
-    const lastNameErrors = await validateName($('#lastNameInput').val());
+    const lastNameErrors = await validateStr($('#lastNameInput').val());
     if (lastNameErrors.length > 0) {
         lastNameErrors.forEach((error) => {
             masterErrorList.push(error);
@@ -200,5 +217,33 @@ $('#deleteProfileButton').on('click', async (event) => {
         window.location.href = next;
     } else {
         location.reload();
+    }
+});
+
+// Validate new budget form
+$('#addBudgetSubmit').on('click', async (event) => {
+    // Prevent the default action
+    event.preventDefault();
+
+    // Validate the inputs
+    let errors = [];
+    const categoryErrors = await validateStr('Budget Name', $('#budgetNameInput').val());
+    if (categoryErrors.length > 0) {
+        categoryErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    // Check the errors list
+    if (errors.length > 0) {
+        // Render the client-side error div
+        $('.clientSideErrors').show();
+
+        // Add each error
+        errors.forEach((err) => {
+            $('.clientSideErrors').append(`<p>${err}</p>`);
+        });
+    } else {
+        $('.addBudgetForm').submit();
     }
 });
