@@ -270,6 +270,31 @@ const validateEmailDuplicative = async (email) => {
     if (user !== null) throw `Error: ${email} already has an account`;
 };
 
+/* ----- Conversion Helpers ----- */
+const convertMonth = async (monthInt) => {
+    // Define the months in order
+    const months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+    ];
+
+    // Create storage
+    const convertedMonth = {'monthInt': monthInt, 'monthStr': months[monthInt - 1]};
+
+    // Return results
+    return convertedMonth;
+}
+
 // Export all functions
 export {
     validateString, 
@@ -283,5 +308,6 @@ export {
     validateEmailDuplicative,
     validatePaymentMethod,
     saltAndHashPassword,
-    formatError
+    formatError,
+    convertMonth
 };

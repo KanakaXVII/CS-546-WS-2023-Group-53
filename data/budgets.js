@@ -1,105 +1,138 @@
 // Imports
 import { budgets } from '../config/mongoCollections.js';
+import { userData } from '../data/index.js';
 import { ObjectId } from 'mongodb';
 import transactionData from './transactions.js';
 
 /*
-DB operations involving budgets will be defined and completed here. This includes:
-- Create Budget
-- Edit Budget
-- Delete Budget
-- Get Budget
+  Get Functions:
+  - Get Budget By ID
+  - Get All Budgets by User ID
 */
 
-// Create Budget
-const create = async (userId, month, year, budgets) => {
-  // Create a new object
-  const budgetInfo = {
-    userId: ObjectId(userId),
+// Get budget by ID
+const getBudgetByID = async (budgetId) => {
+  // Mount the budgets collection
+  const budgetCollection = await budgets();
+
+  // Search for a record with the budget ID
+  const budget = await budgetCollection.findOne({_id: new ObjectId(budgetId)});
+
+  // Validate the response
+  if (!budget) throw 'Budget not found';
+
+  // Return the results
+  return budget;
+};
+
+// Get all budgets by User ID
+const getBudgetsByUserId = async (userId) => {
+  // Validate that the user exists
+  let user = undefined;
+
+  try {
+    user = await userData.getUserByID(userId);
+  } catch (e) {
+    throw [500, e];
+  }
+
+  if (!user || user === undefined) {
+    throw [404, 'User not found'];
+  }
+
+  // Mount the budgets collection
+  const budgetCollection = await budgets();
+
+  // Search for records with the user ID
+  const userBudgets = await budgetCollection.find({'userId': new ObjectId(userId)}).toArray();
+
+  // Return response
+  return userBudgets;
+};
+
+/*
+  Create Functions:
+  - Create New Budget
+*/
+
+// Create a new budget
+const createBudget = async (userId, month, year, name, amount, recurring) => {
+  // Validate that the user exists
+  let user = undefined;
+
+  try {
+    user = await userData.getUserByID(userId);
+  } catch (e) {
+    throw [500, e];
+  }
+
+  if (!user || user === undefined) {
+    throw [404, 'User not found'];
+  }
+
+  // Mount the budgets collection
+  const budgetCollection = await budgets();
+
+  // Make sure budget item is not duplicative
+  const dupeBudget = await budgetCollection.find({
+    'userId': new ObjectId(userId),
     month: month,
     year: year,
-    budgets: budgets,
-    totalSpend: 0,
-    totalBudget: budgets.reduce((total, budget) => total + budget.budgetedAmount, 0),
+    name: name
+  }).toArray();
+
+  if (dupeBudget.length > 0) {
+    throw 'Budget already exists!'
+  }
+
+  // Create a budget object
+  let budget = {
+    userId: new ObjectId(userId),
+    month: month,
+    year: year,
+    name: name,
+    amount: amount,
+    recurring: recurring
   };
 
-  // Write to DB
-  const budgetCollection = await budgets();
-  const result = await budgetCollection.insertOne(budgetInfo);
+  // Add budget to collection
+  const newBudget = await budgetCollection.insertOne(budget);
 
-  if (result.insertedCount === 0) {
-    throw 'Could not create budget';
-  }
+  // Validate insert action
+  if (!newBudget.insertedId) throw [500, `Error: Failed to insert paycheck for user ${userId}`];
 
-  return await get(result.insertedId);
-};
-
-// Get Budget by ID
-const get = async (id) => {
-  const budgetCollection = await budgets();
-
-  const obj_id = new ObjectId(id);
-  const budget = await budgetCollection.findOne({ _id: obj_id });
-
-  if (!budget) {
-    throw 'Budget not found';
-  }
-
-  // get transactions for user for the month and year
-  const transactions = await getTransactionsForUser(budget.userId, budget.month, budget.year);
-  const updatedBudget = {
-    ...budget,
-    totalSpend: transactions.reduce((total, transaction) => total + transaction.amount, 0),
-  };
-
-  return updatedBudget;
-};
-
-// Edit Budget
-const update = async (id, budgetUpdates) => {
-  const budgetCollection = await budgets();
-  const obj_id = new ObjectId(id);
-  const budget = await budgetCollection.findOne({ _id: obj_id });
-
-  if (!budget) {
-    throw 'Budget not found';
-  }
-
-  const updatedBudget = {
-    ...budget,
-    ...budgetUpdates,
-  };
-
-  // get transactions for user for the month and year
-  const transactions = await getTransactionsForUser(updatedBudget.userId, updatedBudget.month, updatedBudget.year);
-  updatedBudget.totalSpend = transactions.reduce((total, transaction) => total + transaction.amount, 0);
-  updatedBudget.totalBudget = updatedBudget.budgets.reduce((total, budget) => total + budget.budgetedAmount, 0);
-
-  const result = await budgetCollection.replaceOne({ _id: obj_id }, updatedBudget);
-  if (result.modifiedCount === 0) {
-    throw 'Could not update budget';
-  }
-
-  return await get(id);
+  // Return the results
+  return 'Successfully added budget';
 };
 
 /*
   Delete Functions:
-  - Remove...Get clarity on this one
+  - Delete Budget By ID
   - Delete All Budgets for User
 */
 
-// Delete Budget
-const remove = async (id) => {
-  const budgetCollection = await budgets();
-  const obj_id = new ObjectId(id);
+// Delete budget by ID
+const deleteBudgetByID = async (budgetId) => {
+  // Valdiate that the budget exists
+  let budget = undefined;
+  budget = await getBudgetByID(budgetId);
 
-  const result = await budgetCollection.deleteOne({ _id: obj_id });
-  if (result.deletedCount === 0) {
-    throw 'Could not delete budget';
+  // Mount the budgets collection
+  const budgetCollection = await budgets();
+
+  // Delete the budget from DB
+  let deleteOperation = undefined;
+  try {
+    deleteOperation = await budgetCollection.deleteOne({_id: new ObjectId(budgetId)});
+  } catch (e) {
+    throw e;
   }
 
-  return true;
+  // Validate deletion
+  if (deleteOperation.deletedCount === 0) throw 'Could not delete paycheck';
+
+  // Return success message
+  return 'Successfully deleted budget';
 };
 
 // Delete All User Budgets
@@ -121,14 +154,14 @@ const deleteAllUserBudgets = async (userId) => {
   }
 
   // Return success message
-  return `Successfully deleted ${deleteOperations.deletedCount} budgets`;
+  return `Successfully deleted ${deleteOperation.deletedCount} budgets`;
 };
 
 // Export functions
 export default {
-  create,
-  get,
-  update,
-  remove,
+  getBudgetByID,
+  getBudgetsByUserId,
+  createBudget,
+  deleteBudgetByID,
   deleteAllUserBudgets
 };

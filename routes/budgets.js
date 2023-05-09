@@ -6,125 +6,101 @@ import * as helpers from '../helpers.js';
 // Create a router
 const router = Router();
 
-// Build Routes
+// Build routes
 router
   .route('/')
+  .get(async (req, res) => {
+    // Get the users ID from session
+    const userId = req.session.profile._id;
+
+    // Perform DB operation to get budget data
+    const budgetRecords = await budgetData.getBudgetsByUserId(userId);
+
+    // Determine if there are budgets to render
+    let hasBudgets = false;
+
+    if (budgetRecords.length > 0) {
+      hasBudgets = true;
+    }
+
+    // Check fir query path parameters
+    let hasErrors = false;
+    let errorMessage = undefined;
+    if (Object.keys(req.query).length > 0) {
+      hasErrors = req.query.hasErrors;
+      errorMessage = req.query.errorMessage;
+    }
+
+    // Render the budgets page
+    res.render('budgets', {
+      title: 'Budgets',
+      hasBudgets: hasBudgets,
+      budgets: budgetRecords,
+      hasErrors: hasErrors,
+      errorMessage: errorMessage
+    });
+  })
+
   .post(async (req, res) => {
-    // Validate user is authenticated
-    const authToken = req.headers.authorization;
-    const userId = await helpers.validateAuthToken(authToken);
+    // Split inputs
+    const splitDate = req.body.monthYearInput.split('-');
+    let month = splitDate[1];
+    let year = splitDate[0];
+    let amount = req.body.budgetedAmountInput;
+    let name = req.body.budgetNameInput;
 
-    // Get the request body
-    const budgetInfo = req.body;
+    // Convert numerical inputs to numerical types
+    month = Number(month);
+    year = Number(year);
+    amount = Number(amount);
 
-    // Validate params were passed
-    if (!budgetInfo || Object.keys(budgetInfo).length === 0) {
-      return res.status(400).json({ error: 'There are no fields in the request body.' });
+    // Get the month name
+    const monthVals = await helpers.convertMonth(month);
+
+    // Determine if it is recurring or not
+    let recurring = false;
+    if (req.body.recurringInput) {
+      recurring = true;
     }
 
-    // Validate the inputs
+    // Add the new budget
     try {
-      helpers.validateBudgetInfo(budgetInfo);
-    } catch (e) {
-      // Format and send error response
-      const errorAttrs = helpers.formatError(e);
-      return res.status(errorAttrs.status).json({ error: errorAttrs.message });
-    }
+      const newBudget = await budgetData.createBudget(
+        req.session.profile._id.toString(),
+        monthVals.monthStr,
+        year,
+        name,
+        amount,
+        recurring
+      );
+      } catch (e) {
+        res.redirect(`/budgets?hasErrors=true&errorMessage=${e}`);
+        return;
+      }
 
-    // Create new budget for user
-    try {
-      // Call the data function
-      const newBudget = await budgetData.create(userId, budgetInfo.month, budgetInfo.year, budgetInfo.budgets);
-
-      // Send the results back
-      res.json(newBudget);
-    } catch (e) {
-      // Format and send error response
-      const errorAttrs = helpers.formatError(e);
-      return res.status(errorAttrs.status).json({ error: errorAttrs.message });
-    }
+    // Redirect back to the budgets page
+    res.redirect('/budgets');
+    return;
   });
 
 router
-  .route('/:id')
-  .get(async (req, res) => {
-    // Validate user is authenticated
-    const authToken = req.headers.authorization;
-    await helpers.validateAuthToken(authToken);
-
-    // Get the ID parameter
-    const budgetId = req.params.id;
-
-    // Get budget by ID
-    try {
-      const budget = await budgetData.get(budgetId);
-
-      // Send the results back
-      res.json(budget);
-    } catch (e) {
-      // Format and send error response
-      const errorAttrs = helpers.formatError(e);
-      return res.status(errorAttrs.status).json({ error: errorAttrs.message });
-    }
-  })
-  .put(async (req, res) => {
-    // Validate user is authenticated
-    const authToken = req.headers.authorization;
-    await helpers.validateAuthToken(authToken);
-
-    // Get the ID parameter
-    const budgetId = req.params.id;
-
-    // Get the request body
-    const budgetInfo = req.body;
-
-    // Validate params were passed
-    if (!budgetInfo || Object.keys(budgetInfo).length === 0) {
-      return res.status(400).json({ error: 'There are no fields in the request body.' });
-    }
-
-    // Validate the inputs
-    try {
-      helpers.validateBudgetInfo(budgetInfo);
-    } catch (e) {
-      // Format and send error response
-      const errorAttrs = helpers.formatError(e);
-      return res.status(errorAttrs.status).json({ error: errorAttrs.message });
-    }
-
-    // Update budget by ID
-    try {
-      const updatedBudget = await budgetData.update(budgetId, budgetInfo);
-
-      // Send the results back
-      res.json(updatedBudget);
-    } catch (e) {
-      // Format and send error response
-      const errorAttrs = helpers.formatError(e);
-      return res.status(errorAttrs.status).json({ error: errorAttrs.message });
-    }
-  })
+  .route('/budget/:id')
   .delete(async (req, res) => {
-    // Validate user is authenticated
-    const authToken = req.headers.authorization;
-    await helpers.validateAuthToken(authToken);
+    // Get the request body params
+    const budgetID = req.params.id;
 
-        // Get the ID parameter
-        const budgetId = req.params.id;
+    // Perform DB operation to delete it
+    try {
+      const deletedBudget = await budgetData.deleteBudgetByID(budgetID);
+    } catch (e) {
+      res.redirect(`/budgets?hasErrors=true&errorMessage=${e}`);
+      return;
+    }
 
-        // Delete budget by ID
-        try {
-          const deletedBudget = await budgetData.remove(budgetId);
-    
-          // Send the results back
-          res.json(deletedBudget);
-        } catch (e) {
-          // Format and send error response
-          const errorAttrs = helpers.formatError(e);
-          return res.status(errorAttrs.status).json({ error: errorAttrs.message });
-        }
+    // Redirect back to the budgets page
+    res.redirect('/budgets');
+    return;
   });
-    
+
 // Export the router
 export default router;
-

@@ -181,6 +181,21 @@ app.delete('/users/:id', async (req, res, next) => {
     next();
 });
 
+// Check for budget deletion via button
+app.use('/budgets/budget/:id', async (req, res, next) => {
+    // Check to see if there is a parameter in the URL
+    if (req.query) {
+        // Check if the query is for a DELETE method
+        if (req.query.realMethod === 'DELETE') {
+            // Change the request method to a DELETE method
+            req.method = 'DELETE';
+        }
+    }
+
+    // Continue
+    next();
+});
+
 /* End Middleware Functions */
 
 
