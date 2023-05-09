@@ -68,15 +68,15 @@ router.route("/").get(async (req, res) => {
   }
 
   // google graph test
-  let graphData = [
-    ["Task", "Hours per Day"],
-    ["Work", 8],
-    ["Eat", 2],
-    ["Sleep", 8],
-    ["Exercise", 1],
-    ["Watch TV", 1],
-    ["Socialize", 4],
-  ];
+  // let graphData = [
+  //   ["Task", "Hours per Day"],
+  //   ["Work", 8],
+  //   ["Eat", 2],
+  //   ["Sleep", 8],
+  //   ["Exercise", 1],
+  //   ["Watch TV", 1],
+  //   ["Socialize", 4],
+  // ];
 
   let data = {
     // Placeholder view
@@ -92,7 +92,7 @@ router.route("/").get(async (req, res) => {
     transactionCategories: transactionCategories,
     // budgets: budgetRecords,
     userProfile: req.session.profile,
-    graphData: JSON.stringify(graphData),
+    // graphData: JSON.stringify(graphData),
   };
 
   // filter paychecks by notes
