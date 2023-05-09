@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import { budgetData, userData } from '../data/index.js';
 import * as helpers from '../helpers.js';
+import xss from 'xss';
 
 // Create a router
 const router = Router();
