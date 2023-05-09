@@ -4,6 +4,7 @@ import { userData } from '../data/index.js';
 import * as helpers from '../helpers.js';
 import sgMail from '@sendgrid/mail';
 import bcrypt from 'bcrypt';
+import xss from 'xss';
 
 // Create the router
 const router = express.Router();
@@ -16,7 +17,7 @@ router.get('/forgot-password', (req, res) => {
 // Process a reset password request
 router.post('/reset-password', async (req, res) => {
   // Extract the email from body parameters
-  const email = req.body.email;
+  const email = xss(req.body.email);
 
   // Check to make sure email exists
   let user = undefined;
@@ -96,12 +97,19 @@ router
   })
 
   .post(async (req, res) => {
+    // Create an object for the inputs
+    const userInputs = {
+      currentPasswordInput: xss(req.body.currentPasswordInput),
+      firstPasswordInput: xss(req.body.firstPasswordInput),
+      secondPasswordInput: xss(req.body.secondPasswordInput)
+    };
+
     // Ensure the new password is different from the current one
     const currentUserDBRecord = await userData.getUserByID(req.session.profile._id);
     const currentPassword = currentUserDBRecord.password;
 
     // Compare current password to new password
-    const passwordCheck = await bcrypt.compare(req.body.currentPasswordInput, currentPassword);
+    const passwordCheck = await bcrypt.compare(userInputs.currentPasswordInput, currentPassword);
     if (!passwordCheck) {
       res.render('changePassword', {
         hasErrors: true,
@@ -111,7 +119,7 @@ router
     }
 
     // Ensure two new password inputs match
-    if (req.body.firstPasswordInput !== req.body.secondPasswordInput) {
+    if (userInputs.firstPasswordInput !== userInputs.secondPasswordInput) {
       res.render('changePassword', {
         hasErrors: true,
         errorMessage: 'New passwords do not match'
@@ -122,7 +130,7 @@ router
     // Hash and salt the password
     let newPassword = undefined;
     try {
-      const hashedPass = await helpers.saltAndHashPassword(req.body.firstPasswordInput);
+      const hashedPass = await helpers.saltAndHashPassword(userInputs.firstPasswordInput);
       newPassword = hashedPass;
     } catch (e) {
         throw [500, 'Failed to hash password'];

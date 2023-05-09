@@ -4,6 +4,7 @@ import { Router } from 'express';
 import * as helpers from '../helpers.js';
 import axios from 'axios';
 import { userData } from '../data/index.js';
+import xss from 'xss';
 
 // Create the router
 const router = Router();
@@ -37,13 +38,13 @@ router.route('/processRegister').post(async (req, res) => {
     // Get the form data
     const formData = req.body;
 
-    // Reformat the form inputs
+    // Reformat and sanitize the form inputs 
     const newUserInputs = {
-        firstName: formData.firstNameInput,
-        lastName: formData.lastNameInput,
-        email: formData.emailInput,
-        firstPassword: formData.firstPasswordInput,
-        secondPassword: formData.secondPasswordInput
+        firstName: xss(formData.firstNameInput),
+        lastName: xss(formData.lastNameInput),
+        email: xss(formData.emailInput),
+        firstPassword: xss(formData.firstPasswordInput),
+        secondPassword: xss(formData.secondPasswordInput)
     };
     
     // Validate the form inputs
