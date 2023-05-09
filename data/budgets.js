@@ -75,7 +75,7 @@ const createBudget = async (userId, month, year, name, amount, recurring) => {
 
   // Make sure budget item is not duplicative
   const dupeBudget = await budgetCollection.find({
-    'userId': new ObjectId(userId),
+    userId: new ObjectId(userId),
     month: month,
     year: year,
     name: name
