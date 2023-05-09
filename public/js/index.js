@@ -188,14 +188,14 @@ $('#registerFormSubmit').on('click', async (event) => {
     }
 
     // Validate the name parameters
-    const firstNameErrors = await validateStr($('#firstNameInput').val());
+    const firstNameErrors = await validateStr('First Name', $('#firstNameInput').val());
     if (firstNameErrors.length > 0) {
         firstNameErrors.forEach((error) => {
             masterErrorList.push(error);
         });
     }
 
-    const lastNameErrors = await validateStr($('#lastNameInput').val());
+    const lastNameErrors = await validateStr('Last Name', $('#lastNameInput').val());
     if (lastNameErrors.length > 0) {
         lastNameErrors.forEach((error) => {
             masterErrorList.push(error);
@@ -224,6 +224,8 @@ $('#registerFormSubmit').on('click', async (event) => {
         // Add error to master list
         masterErrorList.push('New passwords do not match');
     }
+
+    console.log(masterErrorList);
 
     // Check master list
     if (masterErrorList.length > 0) {
@@ -319,5 +321,26 @@ $('#addBudgetSubmit').on('click', async (event) => {
         });
     } else {
         $('.addBudgetForm').submit();
+    }
+});
+
+// Validate payment method form
+$('#newMethodNameSubmit').on('click', async (event) => {
+    // Prevent the default action
+    event.preventDefault();
+
+    // Validate the string input
+    let errorList = [];
+    try {
+        methodNameErrors = await validateStr('Payment Method Name', $('#methodNameInput').val());
+    } catch (e) {
+        errorList.append(e);
+    }
+
+    // Check for errors
+    if (errorList.length > 0) {
+        $('.clientErrors').append(e);
+    } else {
+        $('#newPaymentMethodForm').submit();
     }
 });

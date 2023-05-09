@@ -19,12 +19,18 @@
     
     <!-- User Payment Methods -->
     {{#if hasPayMethods}}
-    <h2>Your Payment Methods</h2>
-    <ul>
-    {{#each profile.paymentMethods}}
-        <li>{{ this.name }}</li>
-    {{/each}}
-    </ul>
+    <table>
+        <tr>
+            <th>Payment Methods</th>
+            <th></th>
+        </tr>
+        {{#each payMethods}}
+        <tr>
+            <td>{{ this.name }}</td>
+            <td><a href="/payMethod/{{this._id}}?realMethod=DELETE" class="deletePayMethodButton" id="payMethod_{{this._id}}">Delete</a></td>
+        </tr>
+        {{/each}}
+    </table>
     {{/if}}
 
     <br>
@@ -35,6 +41,21 @@
     <p class="successMessage">Your profile was successfully updated!</p>
     {{/if}}
 
+    <!-- Render Server-Side Errors -->
+    {{#if hasErrors}}
+    <ul class="errorList">
+        {{#each errors}}
+        <li>
+            {{ this }}
+        </li>
+        {{/each}}
+    </ul>
+    {{/if}}
+
+    <!-- Render Client-Side Errors -->
+    <div class="clientErrors"></div>
+
+    <h3>Change Your Name</h3>
     <form action="/users/{{ profile._id }}" method="POST">
         <!-- Name Change Input -->
         <label for="firstName">Change First Name?</label>
@@ -47,15 +68,15 @@
         <input type="submit" id="changeProfileSubmit">
     </form>
 
-    {{#if hasErrors}}
-    <ul class="errorList">
-        {{#each errors}}
-        <li>
-            {{ this }}
-        </li>
-        {{/each}}
-    </ul>
-    {{/if}}
+    <h3>Add a Payment Method</h3>
+    <form action="/users/{{ profile._id }}/payment" method="POST" id="newPaymentMethodForm">
+        <!-- Method Name Input -->
+        <label for="methodNameInput">Method Name</label>
+        <input type="text" name="methodNameInput" id="methodNameInput">
+
+        <!-- Submit -->
+        <input type="submit" id="newMethodNameSubmit">
+    </form>
 
     <!-- Change Password Option -->
     <a href="/recovery/changePassword">Change Password</a>

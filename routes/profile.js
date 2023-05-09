@@ -27,13 +27,17 @@ router.route('/').get(async (req, res) => {
         hasPayMethods = true;
     }
 
+    // Get current payment methods
+    const payMethods = await userData.getPaymentMethodsByID(req.session.profile._id);
+
     // Render the page
     res.render('profile', {
         title: 'Profile',
-        profile: userProfile,
+        profile: req.session.profile,
         hasErrors: false,
         changeSuccess: false,
-        hasPayMethods: hasPayMethods
+        hasPayMethods: hasPayMethods,
+        payMethods: payMethods.paymentMethods
     });
 });
 
