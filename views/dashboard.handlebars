@@ -1,14 +1,268 @@
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+        // console.log("{{graphData}}")
+        let graphData = JSON.parse('{{{graphData}}}');
+        console.log(graphData);
+        
+</script>
 <main>
-    <!-- Navbar -->
-    <div class="navbar">
-        <a href="/dashboard" class="navbarElement" id="currentNavbarLink">Dashboard</a>
-        <a href="/profile" class="navbarElement">Profile</a>
-        <a href="/paychecks" class="navbarElement">Paychecks</a>
-        <a href="/transactions" class="navbarElement">Transactions</a>
-        <a href="/budgets" class="navbarElement">Budgets</a>
-        <a href="/logout" class="navbarElement">Logout</a>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <a
+      href="/dashboard"
+      class="navbarElement"
+      id="currentNavbarLink"
+    >Dashboard</a>
+    <a href="/profile" class="navbarElement">Profile</a>
+    <a href="/paychecks" class="navbarElement">Paychecks</a>
+    <a href="/transactions" class="navbarElement">Transactions</a>
+    <a href="/budgets" class="navbarElement">Budgets</a>
+    <a href="/logout" class="navbarElement">Logout</a>
+  </div>
+
+  <h1>{{title}}</h1>
+
+  <!-- Render Server Errors -->
+  {{#if hasErrors}}
+    <p class="errorMessage">{{errorMessage}}</p>
+  {{/if}}
+
+  <div class="dashboard-container">
+    <div id="chart_div">
+      
     </div>
-    
-    {{ title }}
+    {{#if hasPaychecks}}
+      <div class="dashboard-box paychecks-box">
+        <h2>Paychecks</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <td>
+                <form>
+                  <label for="paycheckAmountFilter">Filter by amount</label>
+                  <input type="number" name="paycheckMinAmount" placeholder="Minimum Amount"  />
+                  <input type="number" name="paycheckMaxAmount" placeholder="Maximum Amount"  />
+                  <input type="submit" value="Search" /> 
+                </form>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              <form>
+                <label for="paycheckSearchByNotes">Search by Notes:</label>
+                <input
+                  type="text"
+                  id="paycheckSearchByNotes"
+                  name="paycheckSearchByNotes"
+                />
+                <input type="submit" value="Search">
+              </form>
+              </td>
+            </tr>
+             <tr>
+              <td>
+                <label> Filter by date: </label>
+                <input type="text" name="paychecksDateFilter" />
+              </td>
+            </tr>
+            <tr>
+              <th>Date Received</th>
+              <th>Paycheck Amount</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each paychecks}}
+
+              <tr>
+                <td>{{this.date}}</td>
+                <td>${{this.amount}}</td>
+                <td>{{this.notes}}</td>
+              </tr>
+            {{/each}}
+            <tr>
+              <td>
+            {{#if hasPaycheckFilter}}
+               <input type="button" onclick="location.href='/dashboard'" value="Clear Filter!" />
+            {{/if}}
+            </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+      </div>
+    {{else if hasNoFilteredPaychecks}}
+      <div class="dashboard-box paychecks-box">
+        <h2>Paychecks</h2>
+        <h4>No paychecks found with given value!</h4>
+        <input type="button" onclick="location.href='/dashboard'" value="Go back to Dashboard!" />
+      </div>
+    {{else}}
+      <div class="dashboard-box paychecks-box">
+        <h2>Paychecks</h2>
+        <h4>No paychecks found!</h4>
+      </div>
+    {{/if}}
+
+    {{#if hasTransactions}}
+      <div class="dashboard-box transactions-box">
+        <h2>Transactions</h2>
+        <table>
+          <thead>
+            <tr>
+              <td>
+                <form>
+                  <input type="number" name="transactionMinAmount" placeholder="Minimum Amount"  />
+                  <input type="number" name="transactionMaxAmount" placeholder="Maximum Amount"  />
+                  <input type="submit" value="Search" /> 
+                </form>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <form>
+                <label for="transactionsCategory">Select the category</label>
+                <input
+                  list="categories"
+                  id="transactionsCategory"
+                  name="transactionsCategory"
+                />
+                <datalist id="categories">
+                    {{#each transactionCategories}}
+                        <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                </datalist>
+                <input type="submit" value="Search">
+              </form>
+              </tr>
+            </tr>
+            <tr>
+              <td>
+                <form>
+                  
+                <label for="transactionsPaymentMethod">Select by category</label>
+                
+                <input
+                  list="paymentMethods"
+                  id="transactionsPaymentMethod"
+                  name="transactionsPaymentMethod"
+                />
+                <datalist id="paymentMethods">
+                    <option value="Credit Card">Credit Card</option>
+                    <option value="Debit Card">Debit Card</option>
+                    <option value="Cash">Cash</option>
+                    <option value="Bank Transfer">Bank Transfer</option>
+                </datalist>
+                <input type="submit" value="Search">
+              </form>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label> Filter by date: </label>
+                <input type="text" name="transactionDateFilter" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+              <form>
+                <label for="transactionSearchByName">Search by Expense Name:</label>
+                <input
+                  type="text"
+                  id="transactionSearchByName"
+                  name="transactionSearchByName"
+                />
+                <input type="submit" value="Search">
+              </form>
+              </td>
+            </tr>
+            <tr>
+              <th>Date</th>
+              <th>Method</th>
+              <th>Expense Name</th>
+              <th>Amount</th>
+              <th>Category</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each transactions}}
+              <tr>
+                <tr>
+                  <td>{{this.date}}</td>
+                  <td>{{this.method}}</td>
+                  <td>{{this.expenseName}}</td>
+                  <td>${{this.amount}}</td>
+                  <td>{{this.category}}</td>
+                </tr>
+              </tr>
+
+            {{/each}}
+            <tr>
+              <td>
+            {{#if hasTransactionFilter}}
+               <input type="button" onclick="location.href='/dashboard'" value="Clear Filter!" />
+            {{/if}}
+            </td>
+            </tr>
+          </tbody>
+        </table>
+    {{else if hasNoFilteredTransactions}}
+      <div class="dashboard-box transactions-box">
+        <h2>Transactions</h2>
+        <h4>No Transactions found with given category!</h4>
+        <input type="button" onclick="location.href='/dashboard'" value="Go back to Dashboard!" />
+      </div>
+      </div>
+    {{else}}
+      <div class="dashboard-box transactions-box">
+        <h2>Transactions</h2>
+        <h4>No transactions found!</h4>
+      </div>
+    {{/if}}
+
+    {{!-- {{#if hasBudgets}}
+      <div class="dashboard-box budgets-box">
+        <h2>Budgets</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Year</th>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Recurring</th>
+            </tr>
+          </thead>
+          <tbody>
+            <td>{{this.month}}</td>
+            <td>{{this.year}}</td>
+            <td>{{this.name}}</td>
+            <td>${{this.amount}}</td>
+            <td>{{this.recurring}}</td>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2">Total Spend:</td>
+              <td>{{totalSpend}}</td>
+            </tr>
+            <tr>
+              <td colspan="2">Total Budget:</td>
+              <td>{{totalBudget}}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    {{else}}
+      <div class="dashboard-box budgets-box">
+        <h2>Budgets</h2>
+        <h4>No budgets found!</h4>
+      </div>
+
+    {{/if}} --}}
+
+  </div>
 
 </main>
