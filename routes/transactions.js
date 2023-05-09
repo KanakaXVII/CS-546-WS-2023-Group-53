@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { transactionData } from '../data/index.js';
+import { userData, transactionData } from '../data/index.js';
 import * as helpers from '../helpers.js';
 
 const router = Router();
@@ -37,7 +37,8 @@ router
                 errorMessage = req.query.errorMessage;
             }
 
-
+            // Get the user's payment methods
+            const paymentMethodresults = await userData.getPaymentMethodsByID(req.session.profile._id);
 
             // Send the results back
             res.render('addTransaction', {
@@ -46,7 +47,8 @@ router
                 errorMessage: errorMessage,
                 userId: userId,
                 hasTransactions: hasTransactions,
-                transactions: transactions
+                transactions: transactions,
+                paymentMethods: paymentMethodresults.paymentMethods
             });
 
     })

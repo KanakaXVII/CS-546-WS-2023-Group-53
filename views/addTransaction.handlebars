@@ -29,10 +29,13 @@
             <!-- Method Input -->
             <label for="methodInput">Payment Method</label><br>
             <select name="methodInput" id="methodInput" required>
-                <option value="Credit Card">Credit Card</option>
+                {{!-- <option value="Credit Card">Credit Card</option>
                 <option value="Debit Card">Debit Card</option>
                 <option value="Cash">Cash</option>
-                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="Bank Transfer">Bank Transfer</option> --}}
+                {{#each paymentMethods}}
+                <option value={{ this }}>{{ this }}</option>
+                {{/each}}
             </select><br>
 
             <!-- Expense Name Input -->
