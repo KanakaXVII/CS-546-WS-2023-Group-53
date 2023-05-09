@@ -9,6 +9,7 @@ import profileRoutes from './profile.js';
 import paycheckRoutes from './paychecks.js';
 import dashboardRoutes from './dashboard.js';
 import logoutRoutes from './logout.js';
+import payMethodRoutes from './payMethod.js';
 
 // Build a constructor to glue routes together
 const constructorMethod = (app) => {
@@ -23,11 +24,13 @@ const constructorMethod = (app) => {
     app.use('/paychecks', paycheckRoutes);
     app.use('/dashboard', dashboardRoutes);
     app.use('/logout', logoutRoutes);
+    app.use('/payMethod', payMethodRoutes);
     
     // Set the default route
     app.use('*', (req, res) => {
         // Send a 404
-        res.status(404).json({error: 'Page does not exist'});
+        // res.status(404).json({error: 'Page does not exist'});
+        res.render('error');
     });
 };
 

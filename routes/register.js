@@ -38,6 +38,8 @@ router.route('/processRegister').post(async (req, res) => {
     // Get the form data
     const formData = req.body;
 
+    console.log('test');
+
     // Reformat and sanitize the form inputs 
     const newUserInputs = {
         firstName: xss(formData.firstNameInput),

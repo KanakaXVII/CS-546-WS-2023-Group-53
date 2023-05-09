@@ -34,7 +34,7 @@
                 <option value="Cash">Cash</option>
                 <option value="Bank Transfer">Bank Transfer</option> --}}
                 {{#each paymentMethods}}
-                <option value={{ this }}>{{ this }}</option>
+                <option value={{ this.name }}>{{ this.name }}</option>
                 {{/each}}
             </select><br>
 

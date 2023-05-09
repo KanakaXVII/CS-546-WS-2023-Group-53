@@ -58,7 +58,7 @@ const createUser = async (
 };
 
 // Create payment method
-const createPaymentMethod = async (id, paymentName, paymentType) => {
+const createPaymentMethod = async (id, paymentName) => {
     // Get the DB collection
     const userCollection = await users();
 
@@ -71,11 +71,11 @@ const createPaymentMethod = async (id, paymentName, paymentType) => {
     // Add the payment method to the record matching ID
     const modifiedUser = await userCollection.updateOne(
         {_id: obj_id},
-        {$push: { "paymentMethods": { "_id": pay_id, "name": paymentName, "type": paymentType }}}
+        {$push: { "paymentMethods": { "_id": pay_id, "name": paymentName }}}
     );
 
     // Validate the response
-    if (modifiedUser.modifiedCount === 0) throw [500, `Error: Failed to add payment method`];
+    if (modifiedUser.modifiedCount === 0) throw `Error: Failed to add payment method`;
 
     // Get the modified user
     const user = await getUserByID(id.toString());
