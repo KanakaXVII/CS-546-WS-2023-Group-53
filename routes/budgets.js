@@ -44,10 +44,10 @@ router
   .post(async (req, res) => {
     // Split inputs
     const splitDate = req.body.monthYearInput.split('-');
-    let month = splitDate[1];
-    let year = splitDate[0];
-    let amount = req.body.budgetedAmountInput;
-    let name = req.body.budgetNameInput;
+    let month = xss(splitDate[1]);
+    let year = xss(splitDate[0]);
+    let amount = xss(req.body.budgetedAmountInput);
+    let name = xss(req.body.budgetNameInput);
 
     // Convert numerical inputs to numerical types
     month = Number(month);

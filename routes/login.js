@@ -5,6 +5,7 @@ import * as helpers from '../helpers.js';
 import axios from 'axios';
 import { userData } from '../data/index.js';
 import bcrypt from 'bcrypt';
+import xss from 'xss';
 
 // Create the router
 const router = Router();
@@ -33,8 +34,8 @@ router.route('/processLogin').post(async (req, res) => {
 
     // Reformat the form inputs
     const userLoginInputs = {
-        email: req.body = formData.emailInput,
-        password: req.body = formData.passwordInput
+        email: req.body = xss(formData.emailInput),
+        password: req.body = xss(formData.passwordInput)
     };
 
     // Search for a user with the matching email
@@ -67,12 +68,8 @@ router.route('/processLogin').post(async (req, res) => {
 
         req.session.profile = moddedUserProfile;
 
-        // // Render the dashboard
-        // res.render('../views/dashboard', { // Placeholder view
-        //     title: 'Dashboard',
-        //     userProfile: req.session.profile
-        // });
-        res.redirect('/dashboard'); // This is what it should be when a proper dashboard is set up
+        // Render the dashboard
+        res.redirect('/dashboard');
     } else {
         try {
             res.render('login', {

@@ -124,9 +124,7 @@ const validateEmail = async (emailAddress) => {
 //     });
 // };
 
-
-
-
+/* Non-function Section */
 
 // Client-side validation for change password form
 $('#changePasswordFormSubmit').on('click', async (event) => {

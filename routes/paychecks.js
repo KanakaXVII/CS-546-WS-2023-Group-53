@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import { paycheckData } from '../data/index.js';
 import * as helpers from '../helpers.js';
+import xss from 'xss';
 
 // Create a router
 const router = Router();
@@ -49,9 +50,13 @@ router
 router
     .route('/:id')
     .post(async (req, res) => {
-        // Get the request body and path params
+        // Get the request body and path params and sanitize them
         const paycheckInfo = req.body;
-        const userId = req.params.id;
+        for (const key in paycheckInfo) {
+            paycheckInfo[key] = xss(paycheckInfo[key]);
+        }
+
+        const userId = xss(req.params.id);
 
         // Perform DB operation
         const newPaycheck = await paycheckData.createPaycheck(
