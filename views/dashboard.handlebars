@@ -1,3 +1,88 @@
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.load('current', {packages: ['table']});
+
+
+        google.charts.setOnLoadCallback(drawPaycheckAmountByDate);
+
+        google.charts.setOnLoadCallback(drawTransactionAmountByDate);
+
+        google.charts.setOnLoadCallback(transactionAmountByCategory);
+
+        
+        
+        function drawPaycheckAmountByDate() {
+
+            var data = {{{graphData.paycheckGraphData}}};
+            var dataTableData = google.visualization.arrayToDataTable(data);
+            
+            var options = {title: 'Paycheck Amount by Date Received',
+            subtitle: 'in dollars (usd)',
+              curveType: 'function',
+              legend: { 
+                position: 'bottom' 
+                },
+                'height': 350
+                };
+            
+            var chart = new google.visualization.LineChart(document.getElementById('paycheckAmountByDate'));
+            chart.draw(dataTableData, options);
+        
+        };
+
+        function drawTransactionAmountByDate(){
+        
+
+          var transactionGraphDataLocal = {{{graphData.transactionAmountByDateData}}};
+          var transactionGraphData = google.visualization.arrayToDataTable(transactionGraphDataLocal);
+
+          var options = {
+          title: 'Transaction Amount by Date',
+          subtitle: 'in dollars (USD)',
+          curveType: 'function',
+          legend: { 
+            position: 'bottom' 
+            },
+            'height': 350
+          };
+
+        var chart = new google.visualization.LineChart(document.getElementById('transactionAmountByDate'));
+        chart.draw(transactionGraphData, options);
+        };
+
+        function transactionAmountByCategory(){
+
+          var transactionAmountByCategoryDataLocal = {{{graphData.transactionAmountByCategoryData}}};
+          var transactionAmountByCategoryData = google.visualization.arrayToDataTable(transactionAmountByCategoryDataLocal);
+
+          var transactionAmountByCategoryGrouped = google.visualization.data.group(
+            transactionAmountByCategoryData,
+            [0],
+            [{
+              column: 1,
+              type: 'number',
+              aggregation: google.visualization.data.sum,
+            }]
+          );
+
+
+          var options = {
+            'title':'Transaction Amount by Category',
+                     'width':400,
+                     'height':300};
+
+          
+
+        var table = new google.visualization.PieChart(document.getElementById('transactionAmountByCategory'));
+        table.draw(transactionAmountByCategoryGrouped, options);
+
+        };
+
+
+
+        
+</script>
 
 <main>
 
@@ -23,9 +108,26 @@
   {{/if}}
 
   <div class="dashboard-container">
-    <div id="chart_div">
-      
-    </div>
+    <table>
+      <tr>
+        <td>
+          <div id="paycheckAmountByDate">
+          </div>
+        </td>
+        <td>
+          <div id="transactionAmountByDate">
+          </div>
+        </td>
+        <td>
+          <div id="transactionAmountByCategory">
+        </td>
+    </tr>
+    </table>
+
+    {{!-- <div id="transactionByMehod">
+    </div> --}}
+
+    
     {{#if hasPaychecks}}
       <div class="dashboard-box paychecks-box">
         <h2>Paychecks</h2>

@@ -68,15 +68,30 @@ router.route("/").get(async (req, res) => {
   }
 
   // google graph test
+  //  let graphData = {
+  //   Mushrooms: 3,
+  //   Onions: 1,
+  //   Olives: 1,
+  //   Zucchini: 1,
+  //   Peppers: 2,
+  //   Sausage: 1,
+  //  }
+
   // let graphData = [
-  //   ["Task", "Hours per Day"],
-  //   ["Work", 8],
-  //   ["Eat", 2],
-  //   ["Sleep", 8],
-  //   ["Exercise", 1],
-  //   ["Watch TV", 1],
-  //   ["Socialize", 4],
+  //   ['Category', 'Amount'],
+  //   ['Mushrooms', 3],
+  //   ['Onions', 1],
+  //   ['Olives', 1],
+  //   ['Zucchini', 1],
+  //   ['Peppers', 2],
+  //   ['Sausage', 1],
   // ];
+
+  // let graphData = {
+  //   category
+  // }
+
+  //  graphData = JSON.stringify(graphData);
 
   let data = {
     // Placeholder view
@@ -92,7 +107,6 @@ router.route("/").get(async (req, res) => {
     transactionCategories: transactionCategories,
     // budgets: budgetRecords,
     userProfile: req.session.profile,
-    // graphData: JSON.stringify(graphData),
   };
 
   // filter paychecks by notes
@@ -318,6 +332,64 @@ router.route("/").get(async (req, res) => {
   }
   //end-filter paychecks by amount
 
+  // filtering for the graphs
+  // paychecks amount  by date
+  let paycheckGraphData = [["Date Received", "Amount"]];
+
+  paycheckRecords.forEach((paycheck) => {
+    let result = paycheck.date.toLocaleDateString("en-GB", {
+      // you can use undefined as first argument
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+
+    paycheckGraphData.push([result, Number(paycheck.amount)]);
+  });
+
+  paycheckGraphData = JSON.stringify(paycheckGraphData);
+
+  // end-paychecks amount  by date
+
+  // transactions amount  by date
+  let transactionAmountByDateData = [["Date", "Amount"]];
+
+  transactionRecords.forEach((transaction) => {
+    let result = transaction.date.toLocaleDateString("en-GB", {
+      // you can use undefined as first argument
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+
+    transactionAmountByDateData.push([result, Number(transaction.amount)]);
+  });
+
+  transactionAmountByDateData = JSON.stringify(transactionAmountByDateData);
+
+  // end-transactions amount  by date
+
+  // transaction amount by category
+  let transactionAmountByCategoryData = [["Category", "Amount"]];
+
+  transactionRecords.forEach((transaction) => {
+    transactionAmountByCategoryData.push([
+      transaction.category.toLowerCase(),
+      Number(transaction.amount),
+    ]);
+  });
+
+  transactionAmountByCategoryData = JSON.stringify(
+    transactionAmountByCategoryData
+  );
+
+  data.graphData = {
+    paycheckGraphData: paycheckGraphData,
+    transactionAmountByDateData: transactionAmountByDateData,
+    transactionAmountByCategoryData: transactionAmountByCategoryData,
+  };
+
+  
   // Render the dashboard
   res.render("dashboard", data);
 });
