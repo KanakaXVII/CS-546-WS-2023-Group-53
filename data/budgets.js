@@ -57,6 +57,7 @@ const getBudgetsByUserId = async (userId) => {
 
 // Create a new budget
 const createBudget = async (userId, month, year, name, amount) => {
+
   // Validate that the user exists
   let user = undefined;
 
@@ -78,7 +79,7 @@ const createBudget = async (userId, month, year, name, amount) => {
     userId: new ObjectId(userId),
     month: month,
     year: year,
-    name: name
+    category: category
   }).toArray();
 
   if (dupeBudget.length > 0) {
