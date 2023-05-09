@@ -56,7 +56,7 @@ const getBudgetsByUserId = async (userId) => {
 */
 
 // Create a new budget
-const createBudget = async (userId, month, year, name, amount, recurring) => {
+const createBudget = async (userId, month, year, name, amount) => {
   // Validate that the user exists
   let user = undefined;
 
@@ -91,8 +91,7 @@ const createBudget = async (userId, month, year, name, amount, recurring) => {
     month: month,
     year: year,
     name: name,
-    amount: amount,
-    recurring: recurring
+    amount: amount
   };
 
   // Add budget to collection

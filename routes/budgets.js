@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import { budgetData, userData } from '../data/index.js';
 import * as helpers from '../helpers.js';
+import xss from 'xss';
 
 // Create a router
 const router = Router();
@@ -57,12 +58,6 @@ router
     // Get the month name
     const monthVals = await helpers.convertMonth(month);
 
-    // Determine if it is recurring or not
-    let recurring = false;
-    if (req.body.recurringInput) {
-      recurring = true;
-    }
-
     // Add the new budget
     try {
       const newBudget = await budgetData.createBudget(
@@ -70,8 +65,7 @@ router
         monthVals.monthStr,
         year,
         name,
-        amount,
-        recurring
+        amount
       );
       } catch (e) {
         res.redirect(`/budgets?hasErrors=true&errorMessage=${e}`);
