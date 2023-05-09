@@ -6,6 +6,8 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import session from 'express-session';
 
+
+
 // Create variables for the path directory
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -17,6 +19,34 @@ const _static = express.static(__dirname + '/public');
 app.use('/public', _static);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// express-handlebars helper functions
+// const hbs = exphbs.create({
+//     defaultLayout: 'main',
+//     helpers: {
+//         // Helper function to determine if a user is logged in
+//         matchQuery: function(row) {
+//             const query = document.querySelector('#filter').value.toLowerCase();
+//             const date = row.date.toLowerCase();
+//             const amount = row.amount.toString().toLowerCase();
+//             const notes = row.notes.toLowerCase();
+      
+//             return date.includes(query) || amount.includes(query) || notes.includes(query);
+//           }
+//         }
+//     }
+// );
+
+// const hbs = exphbs.create({
+//     defaultLayout: 'main',
+//     helpers: {
+//         json(content) {
+//             return JSON.stringify(content);
+//         }
+//     }
+// });
+
+
 
 // Configure the template engine
 app.engine('handlebars', exphbs.engine({ defaultLayout: 'main' }));

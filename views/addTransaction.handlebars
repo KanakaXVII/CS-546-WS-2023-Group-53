@@ -12,9 +12,9 @@
     <div class="transactionPage">
         <h1>{{title}}</h1>
 
-        {{!-- {{#if hasErrors}}
+        {{#if hasErrors}}
         <p class="errorMessage">{{errorMessage}}</p>
-        {{/if}} --}}
+        {{/if}}
 
         <p>
             Add a new transaction
@@ -69,6 +69,11 @@
             <td>{{this.expenseName}}</td>
             <td>{{this.amount}}</td>
             <td>{{this.category}}</td>
+            <td>
+                <form action="/transactions/transaction/{{this._id}}?method=DELETE" method="POST">
+                    <input type="submit" value="Delete">
+                </form>
+            </td>
           </tr>
         </tr>
         {{/each}}

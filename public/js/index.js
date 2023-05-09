@@ -90,6 +90,44 @@ const validateEmail = async (emailAddress) => {
     return errors;
 }
 
+// check date for filters
+// const checkDate = async (dateReceived) => {
+//     let startDate = new Date(document.getElementById("transactionStartDate").value);
+//     let endDate = new Date(document.getElementById("transactionEndDate").value);
+//     let paycheckDate = new Date(dateReceived);
+
+//     if (startDate <= paycheckDate && paycheckDate <= endDate) {
+//       return true;
+//     } else {
+//       return false;
+//     }
+// }
+
+
+
+// const filterTable = () => {
+//     const query = document.querySelector('#filter').value.toLowerCase();
+//     const rows = document.querySelectorAll('tbody tr');
+
+//     rows.forEach((row) => {
+//     const data = {
+//       date: row.querySelector('td:nth-child(1)').textContent.toLowerCase(),
+//       amount: row.querySelector('td:nth-child(2)').textContent.toLowerCase(),
+//       notes: row.querySelector('td:nth-child(3)').textContent.toLowerCase(),
+//     };
+
+//     if (data.date.includes(query) || data.amount.includes(query) || data.notes.includes(query)) {
+//       row.style.display = '';
+//     } else {
+//       row.style.display = 'none';
+//     }
+//     });
+// };
+
+
+
+
+
 // Client-side validation for change password form
 $('#changePasswordFormSubmit').on('click', async (event) => {
     // Prevent the default action
@@ -219,6 +257,44 @@ $('#deleteProfileButton').on('click', async (event) => {
         location.reload();
     }
 });
+
+// date-range filter for transactions
+$(function() {
+    $('input[name="transactionDateFilter"]').daterangepicker({
+      opens: 'left'
+    }, function(start, end, label) {
+      let startDate = start.format('YYYY-MM-DD');
+      let endDate = end.format('YYYY-MM-DD');
+      let url = '/dashboard?transaction_start_date=' + startDate + '&transaction_end_date=' + endDate;
+      window.location.href = url;
+    });
+  });
+
+// date-range filter for paychecks
+$(function() {
+    $('input[name="paychecksDateFilter"]').daterangepicker({
+      opens: 'left'
+    }, function(start, end, label) {
+      let startDate = start.format('YYYY-MM-DD');
+      let endDate = end.format('YYYY-MM-DD');
+      let url = '/dashboard?paychecks_start_date=' + startDate + '&paychecks_end_date=' + endDate;
+      window.location.href = url;
+    });
+  });
+   
+// google.charts.load('current', { packages: ['corechart'] });
+// google.charts.setOnLoadCallback(drawChart);
+// //   console.log(graphData);
+//   function drawChart() {
+//     let data = google.visualization.arrayToDataTable(graphData);
+  
+//     let options = {'title':'How Much Pizza I Ate Last Night',
+//     'width':400,
+//     'height':300};
+  
+//     let chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+//     chart.draw(data, options);
+//   }
 
 // Validate new budget form
 $('#addBudgetSubmit').on('click', async (event) => {
