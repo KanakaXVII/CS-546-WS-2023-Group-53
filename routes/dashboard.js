@@ -37,28 +37,52 @@ router.route("/").get(async (req, res) => {
 
   // getting categories for transactions
   let transactionCategories = [];
+  let transactionPaymentMethods = [];
   for (let i = 0; i < transactionRecords.length; i++) {
     transactionCategories.push(transactionRecords[i].category.toLowerCase());
+    transactionPaymentMethods.push(
+      transactionRecords[i].method.toLowerCase()
+    );
   }
   transactionCategories = [...new Set(transactionCategories)];
+  transactionPaymentMethods = [...new Set(transactionPaymentMethods)];
   //end-getting categories for transactions
+
+  // getting payment methods for transactions
+ 
+ 
+
 
   //end-transactions
 
-  //budgets
+  // budgets
   // Perform DB operation to get budget data
-  // const budgetRecords = await budgetData.getBudgetsByUserId(
-  //     userId
-  // );
+  const budgetRecords = await budgetData.getBudgetsByUserId(
+      userId
+  );
 
-  // let hasBudgets = undefined;
+  let hasBudgets = undefined;
 
-  // if (budgetRecords.length === 0) {
-  //     hasBudgets = false;
-  // } else {
-  //     hasBudgets = true;
-  // }
-  // //end-budgets
+  if (budgetRecords.length === 0) {
+      hasBudgets = false;
+  } else {
+      hasBudgets = true;
+  }
+
+  // getting categories for budgets
+  let budgetCategories = [];
+
+
+  for (let i = 0; i < budgetRecords.length; i++) {
+      budgetCategories.push(budgetRecords[i].category.toLowerCase());
+      
+  }
+  budgetCategories = [...new Set(budgetCategories)];
+
+  // getting years for budgets
+  
+
+  //end-budgets
 
   let hasErrors = false;
   let errorMessage = undefined;
@@ -101,11 +125,13 @@ router.route("/").get(async (req, res) => {
     userId: userId,
     hasPaychecks: hasPaychecks,
     hasTransactions: hasTransactions,
-    // hasBudgets: hasBudgets,
+    hasBudgets: hasBudgets,
     paychecks: paycheckRecords,
     transactions: transactionRecords,
     transactionCategories: transactionCategories,
-    // budgets: budgetRecords,
+    transactionPaymentMethods: transactionPaymentMethods,
+    budgets: budgetRecords,
+    budgetCategories: budgetCategories,
     userProfile: req.session.profile,
   };
 
@@ -332,6 +358,106 @@ router.route("/").get(async (req, res) => {
   }
   //end-filter paychecks by amount
 
+  // filter budgets by Category
+  if (req.query.budgetCategory != undefined) {
+    
+    data.budgets = budgetRecords.filter((budget) => {
+      return budget.category.toLocaleLowerCase() === req.query.budgetCategory.toLocaleLowerCase();
+    });
+
+    if (data.budgets.length === 0) {
+      data.hasBudgets = false;
+      data.hasNoFilteredBudgets = true;
+    } else {
+      data.hasBudgetFilter = true;
+    }
+  }
+  //end-filter budgets by Category
+
+  // filter budgets by amount
+  if (
+    req.query.budgetMinAmount != undefined ||
+    req.query.budgetMaxAmount != undefined
+  ) {
+    if (
+      req.query.budgetMinAmount.length > 0 &&
+      req.query.budgetMaxAmount.length > 0
+    ) {
+
+      data.budgets = budgetRecords.filter((budget) => {
+        return (
+          Number(budget.amount) >= Number(req.query.budgetMinAmount) &&
+          Number(budget.amount) <= Number(req.query.budgetMaxAmount)
+        );
+      });
+    }
+
+    if (
+      req.query.budgetMinAmount.length > 0 &&
+      req.query.budgetMaxAmount.length === 0
+    ) {
+
+      data.budgets = budgetRecords.filter((budget) => {
+        return Number(budget.amount) >= Number(req.query.budgetMinAmount);
+      });
+    }
+
+    if (
+      req.query.budgetMinAmount.length === 0 &&
+      req.query.budgetMaxAmount.length > 0
+    ) {
+
+      data.budgets = budgetRecords.filter((budget) => {
+        return Number(budget.amount) <= Number(req.query.budgetMaxAmount);
+      });
+    }
+
+    if (data.budgets.length === 0) {
+      data.hasBudgets = false;
+      data.hasNoFilteredBudgets = true;
+    } else {
+      data.hasBudgetFilter = true;
+    }
+  }
+  //end-filter budgets by amount
+
+  // filter budgets by month and year
+  if (
+    req.query.budgetMonth != undefined || req.query.budgetYear != undefined
+  ) {
+    if (
+      req.query.budgetMonth.length > 0 &&
+      req.query.budgetYear.length > 0
+    ) {
+
+      data.budgets = budgetRecords.filter((budget) => {
+        return (
+          budget.month.toLocaleLowerCase() === req.query.budgetMonth.toLocaleLowerCase() &&
+          Number(budget.year) === Number(req.query.budgetYear)
+        );
+      });
+    }
+
+    if (
+      req.query.budgetMonth.length === 0 &&
+      req.query.budgetYear.length > 0
+    ) {
+
+      data.budgets = budgetRecords.filter((budget) => {
+        return Number(budget.year) === Number(req.query.budgetYear);
+
+      });
+    }
+
+    if(data.budgets.length === 0) {
+      data.hasBudgets = false;
+      data.hasNoFilteredBudgets = true;
+    } else {
+      data.hasBudgetFilter = true;
+    }
+  }
+  //end-filter budgets by month and year
+
   // filtering for the graphs
   // paychecks amount  by date
   let paycheckGraphData = [["Date Received", "Amount"]];
@@ -353,7 +479,8 @@ router.route("/").get(async (req, res) => {
 
   // transactions amount  by date
   let transactionAmountByDateData = [["Date", "Amount"]];
-
+  let transactionAmountByCategoryData = [["Category", "Amount"]];
+  let transactionAmountByPaymentMethodData = [["Payment Method", "Amount"]];
   transactionRecords.forEach((transaction) => {
     let result = transaction.date.toLocaleDateString("en-GB", {
       // you can use undefined as first argument
@@ -362,31 +489,37 @@ router.route("/").get(async (req, res) => {
       day: "2-digit",
     });
 
+
+
     transactionAmountByDateData.push([result, Number(transaction.amount)]);
+    transactionAmountByCategoryData.push([transaction.category.toLowerCase(),Number(transaction.amount)]);
+    transactionAmountByPaymentMethodData.push([transaction.method.toLowerCase(),Number(transaction.amount)]);
   });
 
   transactionAmountByDateData = JSON.stringify(transactionAmountByDateData);
-
-  // end-transactions amount  by date
-
-  // transaction amount by category
-  let transactionAmountByCategoryData = [["Category", "Amount"]];
-
-  transactionRecords.forEach((transaction) => {
-    transactionAmountByCategoryData.push([
-      transaction.category.toLowerCase(),
-      Number(transaction.amount),
-    ]);
-  });
 
   transactionAmountByCategoryData = JSON.stringify(
     transactionAmountByCategoryData
   );
 
+  transactionAmountByPaymentMethodData = JSON.stringify(
+    transactionAmountByPaymentMethodData
+  );
+
+  // budgets amount by category
+  let budgetAmountByCategoryData = [["Category", "Amount"]];
+  budgetRecords.forEach((budget) => {
+    budgetAmountByCategoryData.push([budget.category.toLowerCase(),Number(budget.amount)]);
+  });
+
+  budgetAmountByCategoryData = JSON.stringify(budgetAmountByCategoryData);
+
   data.graphData = {
     paycheckGraphData: paycheckGraphData,
     transactionAmountByDateData: transactionAmountByDateData,
     transactionAmountByCategoryData: transactionAmountByCategoryData,
+    transactionAmountByPaymentMethodData: transactionAmountByPaymentMethodData,
+    budgetAmountByCategoryData: budgetAmountByCategoryData,
   };
 
   

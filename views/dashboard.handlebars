@@ -10,6 +10,10 @@
 
         google.charts.setOnLoadCallback(transactionAmountByCategory);
 
+        google.charts.setOnLoadCallback(transactionAmountByPaymentMethod);
+
+        google.charts.setOnLoadCallback(budgetAmountByCategory);
+
         
         
         function drawPaycheckAmountByDate() {
@@ -79,6 +83,55 @@
 
         };
 
+        function transactionAmountByPaymentMethod (){
+          var transactionAmountByPaymentMethodDataLocal = {{{graphData.transactionAmountByPaymentMethodData}}};
+          
+          var transactionAmountByPaymentMethodData = google.visualization.arrayToDataTable(transactionAmountByPaymentMethodDataLocal);
+
+          var transactionAmountByPaymentMethodGrouped = google.visualization.data.group(
+            transactionAmountByPaymentMethodData,
+            [0],
+            [{
+              column: 1,
+              type: 'number',
+              aggregation: google.visualization.data.sum,
+            }]
+          );
+
+          var options = {
+            'title':'Transaction Amount by Payment Method',
+                     'width':400,
+                     'height':300};
+
+          
+          var table = new google.visualization.PieChart(document.getElementById('transactionAmountByPaymentMethod'));
+          table.draw(transactionAmountByPaymentMethodGrouped, options);
+        }
+
+        function budgetAmountByCategory(){
+          var budgetAmountByCategoryDataLocal = {{{graphData.budgetAmountByCategoryData}}};
+          var budgetAmountByCategoryData = google.visualization.arrayToDataTable(budgetAmountByCategoryDataLocal);
+
+          var budgetAmountByCategoryGrouped = google.visualization.data.group(
+            budgetAmountByCategoryData,
+            [0],
+            [{
+              column: 1,
+              type: 'number',
+              aggregation: google.visualization.data.sum,
+            }]
+          );
+
+          var options = {
+            'title':'Budget Amount by Category',
+                     'width':400,
+                     'height':300};
+
+          
+          var table = new google.visualization.PieChart(document.getElementById('budgetAmountByCategory'));
+          table.draw(budgetAmountByCategoryGrouped, options);
+        }
+
 
 
         
@@ -121,6 +174,16 @@
         <td>
           <div id="transactionAmountByCategory">
         </td>
+
+    </tr>
+    <tr>
+      <td>
+        <div id="transactionAmountByPaymentMethod">
+        </div>
+      </td>
+      <td>
+        <div id="budgetAmountByCategory">
+        </div>
     </tr>
     </table>
 
@@ -232,8 +295,8 @@
                     {{/each}}
                 </datalist>
                 <input type="submit" value="Search">
-              </form>
-              </tr>
+                </form>
+              </td>
             </tr>
             <tr>
               <td>
@@ -247,10 +310,9 @@
                   name="transactionsPaymentMethod"
                 />
                 <datalist id="paymentMethods">
-                    <option value="Credit Card">Credit Card</option>
-                    <option value="Debit Card">Debit Card</option>
-                    <option value="Cash">Cash</option>
-                    <option value="Bank Transfer">Bank Transfer</option>
+                    {{#each transactionPaymentMethods}}
+                        <option value="{{this}}">{{this}}</option>
+                    {{/each}}
                 </datalist>
                 <input type="submit" value="Search">
               </form>
@@ -319,37 +381,104 @@
       </div>
     {{/if}}
 
-    {{!-- {{#if hasBudgets}}
+    {{#if hasBudgets}}
       <div class="dashboard-box budgets-box">
         <h2>Budgets</h2>
         <table>
           <thead>
             <tr>
-              <th>Month</th>
-              <th>Year</th>
-              <th>Category</th>
-              <th>Amount</th>
-              <th>Recurring</th>
+              <td>
+                <form>
+                <label for="budgetCategory">Select the category</label>
+                <input
+                  list="bCategories"
+                  id="budgetsCategory"
+                  name="budgetCategory"
+                />
+                <datalist id="bCategories">
+                    {{#each budgetCategories}}
+                        <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                </datalist>
+                <input type="submit" value="Search">
+                </form>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <form>
+                <label for="budgetYear">Filter by year and month:</label>
+                <input
+                  type="text"
+                  id="budgetYear"
+                  name="budgetYear"
+                />
+                <input
+                list = "budgetMonths"
+                id = "budgetMonth"
+                name="budgetMonth"/>
+                <datalist id="budgetMonths">
+                    <option value="January">
+                    <option value="February">
+                    <option value="March">
+                    <option value="April">
+                    <option value="May">
+                    <option value="June">
+                    <option value="July">
+                    <option value="August">
+                    <option value="September">
+                    <option value="October">
+                    <option value="November">
+                    <option value="December">
+                </datalist>
+
+                <input type="submit" value="Search">
+              </form>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <form>
+                  <input type="number" name="budgetMinAmount" placeholder="Minimum Amount"  />
+                  <input type="number" name="budgetMaxAmount" placeholder="Maximum Amount"  />
+                  <input type="submit" value="Search" /> 
+                </form>
+              </td>
+            </tr>
+            <tr>
+                <th>Month</th>
+                <th>Year</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Recurring</th>
             </tr>
           </thead>
           <tbody>
-            <td>{{this.month}}</td>
-            <td>{{this.year}}</td>
-            <td>{{this.name}}</td>
-            <td>${{this.amount}}</td>
-            <td>{{this.recurring}}</td>
+            {{#each budgets}}
+            <tr>
+                <td>{{ this.month }}</td>
+                <td>{{ this.year }}</td>
+                <td>{{ this.category }}</td>
+                <td>${{ this.amount }}</td>
+                <td>{{ this.recurring }}</td>
+            </tr>
+            {{/each}}
+            <tr>
+              <td>
+                {{#if hasBudgetFilter}}
+               <input type="button" onclick="location.href='/dashboard'" value="Clear Filter!" />
+                {{/if}}
+              </td>
+            </tr>
           </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="2">Total Spend:</td>
-              <td>{{totalSpend}}</td>
-            </tr>
-            <tr>
-              <td colspan="2">Total Budget:</td>
-              <td>{{totalBudget}}</td>
-            </tr>
-          </tfoot>
         </table>
+      </div>
+    {{else if hasNoFilteredBudgets}}
+      <div class="dashboard-box budgets-box">
+        <h2>Budgets</h2>
+        <h4>No filtered budgets found!</h4>
+        <input type="button" onclick="location.href='/dashboard'" value="Go back to Dashboard!" />
+      </div>
       </div>
     {{else}}
       <div class="dashboard-box budgets-box">
@@ -357,7 +486,7 @@
         <h4>No budgets found!</h4>
       </div>
 
-    {{/if}} --}}
+    {{/if}}
 
   </div>
 
