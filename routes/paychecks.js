@@ -56,13 +56,35 @@ router
             paycheckInfo[key] = xss(paycheckInfo[key]);
         }
 
+        // Init errors
+        let errors = [];
+
+        // Validate inputs
+        try {
+            helpers.validateDateString('Paycheck Date', paycheckInfo.checkDateInput);
+        } catch (e) {
+            errors.push(e);
+        }
+
+        try {
+            helpers.validateNumber('Paycheck Amount', Number(paycheckInfo.checkAmountInput));
+        } catch (e) {
+            errors.push(e);
+        }
+
+        try {
+            helpers.validateString('Paycheck Notes', paycheckInfo.checkNotesInput);
+        } catch (e) {
+            errors.push(e);
+        }
+
         const userId = xss(req.params.id);
 
         // Perform DB operation
         const newPaycheck = await paycheckData.createPaycheck(
             userId,
             paycheckInfo.checkDateInput,
-            paycheckInfo.checkAmountInput,
+            Number(paycheckInfo.checkAmountInput),
             paycheckInfo.checkNotesInput
         );
 

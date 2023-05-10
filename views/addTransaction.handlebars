@@ -13,7 +13,9 @@
         <h1>{{title}}</h1>
 
         {{#if hasErrors}}
-        <p class="errorMessage">{{errorMessage}}</p>
+        {{#each errors}}
+        <p class="errorMessage">{{this}}</p>
+        {{/each}}
         {{/if}}
 
         <p>
@@ -28,12 +30,15 @@
 
             <!-- Method Input -->
             <label for="methodInput">Payment Method</label><br>
-            {{!-- <select name="methodInput" id="methodInput" required> --}}
+            <select name="methodInput" id="methodInput" required>
                 {{!-- <option value="Credit Card">Credit Card</option>
                 <option value="Debit Card">Debit Card</option>
                 <option value="Cash">Cash</option>
                 <option value="Bank Transfer">Bank Transfer</option> --}}
-                <input type="text" name="methodInput" id="methodInput" placeholder="Cash" required><br>
+                {{!-- <input type="text" name="methodInput" id="methodInput" placeholder="Cash" required><br> --}}
+                {{#each paymentMethods}}
+                <option value={{ this.name }}>{{ this.name }}</option>
+                {{/each}}
             </select><br>
 
             <!-- Expense Name Input -->

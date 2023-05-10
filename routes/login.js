@@ -72,6 +72,15 @@ router.route('/processLogin').post(async (req, res) => {
         }
     }
 
+    // Check if errors were collected
+    if (errors.length > 0) {
+        res.render('login', {
+            title: 'Login',
+            hasErrors: true,
+            errors: errors
+        });
+    }
+
     // Validate the password
     const passwordCheck = await bcrypt.compare(userLoginInputs.password, user.password);
 

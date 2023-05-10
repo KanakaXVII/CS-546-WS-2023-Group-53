@@ -79,13 +79,13 @@ router.route("/").get(async (req, res) => {
   // getting categories for budgets
   let budgetCategories = [];
 
-if (hasBudgets){
-  for (let i = 0; i < budgetRecords.length; i++) {
-      budgetCategories.push(budgetRecords[i].category.toLowerCase());
-      
+  if (hasBudgets){
+    for (let i = 0; i < budgetRecords.length; i++) {
+        budgetCategories.push(budgetRecords[i].category.toLowerCase());
+        
+    }
+    budgetCategories = [...new Set(budgetCategories)];
   }
-  budgetCategories = [...new Set(budgetCategories)];
-}
 
   // getting years for budgets
   

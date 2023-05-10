@@ -67,8 +67,6 @@ const validateYear = async (year) => {
     if (year > currentYear + 100 || year < currentYear) {
         errors.push('Year must be between this year and 100 years from now');
     }
-
-
 };
 
 // Validate email inputs
