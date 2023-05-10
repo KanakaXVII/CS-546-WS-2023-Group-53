@@ -19,6 +19,7 @@ const validateDateString = (varName, varVal) => {
 
     // Make sure value is a valid date string
     if (isNaN(Date.parse(varVal))) throw `Error: [${varVal}] is not a valid date for ${varName}`;
+
 };
 
 const validateWebsite = (varName, varVal) => {
@@ -29,12 +30,14 @@ const validateWebsite = (varName, varVal) => {
     if (!varVal.startsWith('http://www.')) throw `Error: ${varName} must start with http://www.`;
     if (!varVal.endsWith('.com')) throw `Error: ${varName} must end with .com`;
 
+
     // Check to make sure the domain name is greater than 5 characters
     let split_str = varVal.split('.');
     let domain_space = split_str.slice(1, split_str.length - 1);
     domain_space = domain_space.join('.');
 
     if (domain_space.length < 5) throw `Error: ${varName} domain must be greater than 5 characters. ${domain_space} is not valid.`;
+
 };
 
 const validateEmail = (varName, varVal) => {
@@ -140,6 +143,7 @@ const validateArray = (varName, varVal, subType=['string'], minimumVals=0) => {
         // Make sure each element is a legal type
         if (!subType.includes(typeof val)) throw `Error: The value ${val} in ${varName} is not an allowed type`;
 
+
         // Make sure each type is a valid value based on type
         if (typeof val === 'string') {
             validateString(`${varName} element ${ind}`, val);
@@ -224,7 +228,7 @@ const validatePaymentMethod = (paymentMethodInfo) => {
             try {
                 validateString(k, v);
             } catch (e) {
-                throw [400, e];
+                throw [ e];
             }
         }
     }
