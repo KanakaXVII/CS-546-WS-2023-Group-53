@@ -98,32 +98,6 @@ router.route("/").get(async (req, res) => {
     errorMessage = req.query.errorMessage;
   }
 
-  // google graph test
-  //  let graphData = {
-  //   Mushrooms: 3,
-  //   Onions: 1,
-  //   Olives: 1,
-  //   Zucchini: 1,
-  //   Peppers: 2,
-  //   Sausage: 1,
-  //  }
-
-  // let graphData = [
-  //   ['Category', 'Amount'],
-  //   ['Mushrooms', 3],
-  //   ['Onions', 1],
-  //   ['Olives', 1],
-  //   ['Zucchini', 1],
-  //   ['Peppers', 2],
-  //   ['Sausage', 1],
-  // ];
-
-  // let graphData = {
-  //   category
-  // }
-
-  //  graphData = JSON.stringify(graphData);
-
   let data = {
     // Placeholder view
     title: "Dashboard",

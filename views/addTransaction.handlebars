@@ -32,16 +32,11 @@
 
             <!-- Method Input -->
             <label for="methodInput">Payment Method</label><br>
-            {{!-- <select name="methodInput" id="methodInput" required> --}}
-                {{!-- <option value="Credit Card">Credit Card</option>
-                <option value="Debit Card">Debit Card</option>
-                <option value="Cash">Cash</option>
-                <option value="Bank Transfer">Bank Transfer</option> --}}
+            <select name="methodInput" id="methodInput" required>
                 {{#each paymentMethods}}
                 <option value={{ this.name }}>{{ this.name }}</option>
-                {{/each}} --}}
-                <input type="text" name="methodInput" id="methodInput" placeholder="Cash" required><br>
-            {{!-- </select><br> --}}
+                {{/each}}
+            </select><br>
 
             <!-- Expense Name Input -->
             <label for="expenseNameInput">Expense Name</label><br>
