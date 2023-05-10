@@ -1,10 +1,16 @@
+/* Global */
+* {
+    margin: 0;
+    padding: 0;
+}
+
 /* ----- HTML Elements ----- */
 body {
     font-family: 'Open Sans', sans-serif;
 }
 
-h1 {
-    
+main {
+    margin: 0 5%;
 }
 
 footer {
@@ -13,6 +19,37 @@ footer {
     text-align: center;
     width: 100%;
     font-weight: bolder;
+}
+
+table {
+    border-collapse: collapse;
+    border: black solid 1px;
+    padding: 8px;
+}
+
+tbody {
+    padding: 10px;
+}
+
+tr {
+    border: black dotted 1px;
+}
+
+th, td {
+    padding: 8px;
+    border-radius: 15px;
+}
+
+input[type="submit"] {
+    background-color: #3c3c3c;
+    padding: 8px;
+    margin-top: 10px;
+    color: white;
+    font-weight: bold;
+}
+
+input[type="submit"]:hover {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 1);
 }
 
 /* ----- Class Sets ----- */
@@ -27,7 +64,7 @@ footer {
     width: 50%;
     padding: 20px;
     border-radius: 15px;
-    background-color: #11999e;
+    background-color: #3c3c3c;
     box-shadow: 0px 15px 15px rgba(0, 0, 0, 0.5);
 }
 
@@ -42,7 +79,7 @@ footer {
     border-radius: 15px;
 }
 
-.register-login-swap-button {
+.register-login-swap-button, .forgot-password-link {
     text-decoration: none;
     padding: 15px;
     background-color: #3c3c3c;
@@ -53,28 +90,87 @@ footer {
 }
 
 .errorList {
-    color: red;
+    color: darkred;
     list-style-type: none;
 }
 
+.navbar {
+    background-color: #3c3c3c;
+    padding: 16px;
+    margin: 0 -5.6%;
+}
+
+.navbarElement {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 8px 16px;
+}
+
+.navbarElement:hover {
+    color: grey;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 8px 16px;
+}
+
+.deletePaycheckButton, .deleteBudgetButton, .deletePayMethodButton {
+    text-decoration: none;
+    color: darkred;
+    font-weight: bold;
+}
+
+.deletePaycheckButton:hover, .deleteBudgetButton:hover, .deletePayMethodButton:hover {
+    color: darkred;
+}
+
+.backButton {
+    text-decoration: none;
+    color: #3c3c3c;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.backButton:hover {
+    color: black;
+}
+
+.clientErrors {
+    color: red;
+}
+
+
 /* ----- ID Sets ----- */
-#loginSubmit, #registerSubmit {
+#loginSubmit, #registerFormSubmit {
     margin-top: 10%;
     font-family: 'Open Sans', sans-serif;
     padding: 8px;
-    background-color: #3c3c3c;
-    color: #f4f4f4;
+    background-color: #f4f4f4;
+    color: #3c3c3c;
     font-weight: bold;
     border-radius: 15px;
 }
 
-#loginSubmit:hover, #registerSubmit:hover {
+#loginSubmit:hover, #registerFormSubmit:hover {
     box-shadow: 0px 0px 20px rgba(255, 255, 255, 1);
 }
 
-#loginSubmit:active, #registerSubmit:active {
-    background-color: #f4f4f4;
+#deleteProfileButton {
+    color: darkred;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+#changePasswordButton {
+    text-decoration: none;
     color: #3c3c3c;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+#changePasswordButton:hover {
+    color: black;
 }
 
 /*

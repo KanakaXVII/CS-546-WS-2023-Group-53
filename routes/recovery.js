@@ -19,6 +19,14 @@ router.post('/reset-password', async (req, res) => {
   // Extract the email from body parameters
   const email = xss(req.body.email);
 
+  // Validate the input
+  try {
+    helpers.validateEmail('Email Input', email);
+  } catch (e) {
+    res.render('forgot-password', { error: e, title: 'Forgot Password' });
+    return;
+  }
+
   // Check to make sure email exists
   let user = undefined;
   try {
@@ -103,6 +111,36 @@ router
       firstPasswordInput: xss(req.body.firstPasswordInput),
       secondPasswordInput: xss(req.body.secondPasswordInput)
     };
+
+    // Init errors
+    let errors = [];
+
+    // Validate inputs
+    try {
+      helpers.validatePassword('Current Password', userInputs.currentPasswordInput);
+    } catch (e) {
+      errors.push(e);
+    }
+
+    try {
+      helpers.validatePassword('First Password', userInputs.firstPasswordInput);
+    } catch (e) {
+      errors.push(e);
+    }
+
+    try {
+      helpers.validatePassword('Second Password', userInputs.secondPasswordInput);
+    } catch (e) {
+      errors.push(e);
+    }
+
+    // Check if errors were collected
+    if (errors.length > 0) {
+      res.render('changePassword', {
+        hasErrors: true,
+        errorMessage: errors
+      });
+    }
 
     // Ensure the new password is different from the current one
     const currentUserDBRecord = await userData.getUserByID(req.session.profile._id);

@@ -88,7 +88,7 @@ app.use(async (req, res, next) => {
 // Redirect unauthenticated users
 app.use(async (req, res, next) => {
     // Exclude login and registration pages
-    if (req.originalUrl !== '/login' && req.originalUrl !== '/register' && req.originalUrl !== '/login/processLogin' && req.originalUrl !== '/register/processRegister') { // Change to /login once the route is fixed in index
+    if (req.originalUrl !== '/login' && req.originalUrl !== '/register' && req.originalUrl !== '/login/processLogin' && req.originalUrl !== '/register/processRegister' && req.originalUrl !== '/recovery/forgot-password' && req.originalUrl !== '/recovery/reset-password') { // Change to /login once the route is fixed in index
         // Check if user is authed
         if (!req.session.profile) {
             // Log action
@@ -107,7 +107,7 @@ app.use(async (req, res, next) => {
 // Redirect authenticated users
 app.use(async (req, res, next) => {
     // Include login and registration pages
-    if (req.originalUrl === '/login' || req.originalUrl === '/register' || req.originalUrl === '/login/processLogin' || req.originalUrl === '/register/processRegister') {
+    if (req.originalUrl === '/login' || req.originalUrl === '/register' || req.originalUrl === '/login/processLogin' || req.originalUrl === '/register/processRegister' || req.originalUrl === '/recovery/forgot-password' || req.originalUrl === '/recovery/forgot-password') {
 
         // Check is user is authed
         if (req.session.profile) {

@@ -37,10 +37,6 @@
             <label for="budgetedAmountInput">Budgeted Amount</label><br>
             <input type="number" name="budgetedAmountInput" id="budgetedAmountInput" placeholder="1000" required><br>
 
-            <!-- Recurring Checkbox -->
-            <label for="recurringInput">Recurring Budget?</label>
-            <input type="checkbox" name="recurringInput" id="budgetRecurringInput"><br>
-
             <!-- Submit -->
             <input type="submit" id="addBudgetSubmit">
         </form>
@@ -54,7 +50,6 @@
                 <th>Year</th>
                 <th>Category</th>
                 <th>Amount</th>
-                <th>Recurring</th>
             </tr>
             {{#each budgets}}
             <tr>
@@ -62,11 +57,12 @@
                 <td>{{ this.year }}</td>
                 <td>{{ this.name }}</td>
                 <td>${{ this.amount }}</td>
-                <td>{{ this.recurring }}</td>
                 <td><a href='/budgets/budget/{{this._id}}?realMethod=DELETE' class="deleteBudgetButton" id="budget_{{this._id}}" />Delete</td>
             </tr>
             {{/each}}
         </table>
         {{/if}}
     </div>
+
+    <a href="/dashboard" class="backButton">Back</a>
 </main>

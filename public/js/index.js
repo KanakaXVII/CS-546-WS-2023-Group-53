@@ -67,8 +67,6 @@ const validateYear = async (year) => {
     if (year > currentYear + 100 || year < currentYear) {
         errors.push('Year must be between this year and 100 years from now');
     }
-
-
 };
 
 // Validate email inputs
@@ -726,7 +724,22 @@ $('#budgetYearAndMonth').on('click', async (event) => {
     }
 })
 
+// Validate the paycheck form inputs
+$('#paycheckSubmit').on('click', async (event) => {
+    // Prevent the default action
+    event.preventDefault();
 
+    // Validate the amount input
+    const amountNum = Number($('#checkAmountInput').val());
+    if (amountNum < 0) {
+        // Create a new error item
+        const newErrorMessage = $('<p>');
+        newErrorMessage.text("The amount can't be less than 0");
 
-
-
+        // Render the error
+        $('#paycheckFormClientErrors').show();
+        $('#paycheckFormClientErrors').append(newErrorMessage);
+    } else {
+        $('#newCheckForm').submit();
+    }
+});

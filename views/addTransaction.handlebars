@@ -13,7 +13,9 @@
         <h1>{{title}}</h1>
 
         {{#if hasErrors}}
-        <p class="errorMessage">{{errorMessage}}</p>
+        {{#each errors}}
+        <p class="errorMessage">{{this}}</p>
+        {{/each}}
         {{/if}}
 
         <div class="clientSideErrors" hidden></div>
@@ -35,7 +37,7 @@
                 <option value="Debit Card">Debit Card</option>
                 <option value="Cash">Cash</option>
                 <option value="Bank Transfer">Bank Transfer</option> --}}
-                {{!-- {{#each paymentMethods}}
+                {{#each paymentMethods}}
                 <option value={{ this.name }}>{{ this.name }}</option>
                 {{/each}} --}}
                 <input type="text" name="methodInput" id="methodInput" placeholder="Cash" required><br>
@@ -87,7 +89,7 @@
     {{/if}}
 
     <!-- Back Button -->
-    <a href="/dashboard">Back</a>
+    <a href="/dashboard" class="backButton">Back</a>
 
 
     </div>

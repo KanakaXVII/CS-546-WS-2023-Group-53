@@ -16,9 +16,12 @@
     <p class="errorMessage">{{errorMessage}}</p>
     {{/if}}
 
+    <!-- Render Client-Side Errors -->
+    <div class="clientErrors" id="paycheckFormClientErrors" hidden></div>
+
     <!-- Allow User to Add New Check -->
     <h2>Add New Check</h2>
-    <form action="/paychecks/{{userId}}" method="POST" class="newCheckForm">
+    <form action="/paychecks/{{userId}}" method="POST" id="newCheckForm" class="newCheckForm">
         <!-- Date Input -->
         <label for="dateInput">Date</label><br>
         <input type="date" name="checkDateInput" id="checkDateInput" class="checkDateInput" required><br>
@@ -56,5 +59,5 @@
     {{/if}}
 
     <!-- Back Button -->
-    <a href="/dashboard">Back</a>
+    <a href="/dashboard" class="backButton">Back</a>
 </main>
