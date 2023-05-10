@@ -141,7 +141,7 @@ input[type="submit"]:hover {
 
 
 /* ----- ID Sets ----- */
-#loginSubmit, #registerSubmit {
+#loginSubmit, #registerFormSubmit {
     margin-top: 10%;
     font-family: 'Open Sans', sans-serif;
     padding: 8px;
@@ -151,13 +151,8 @@ input[type="submit"]:hover {
     border-radius: 15px;
 }
 
-#loginSubmit:hover, #registerSubmit:hover {
+#loginSubmit:hover, #registerFormSubmit:hover {
     box-shadow: 0px 0px 20px rgba(255, 255, 255, 1);
-}
-
-#loginSubmit:active, #registerSubmit:active {
-    background-color: #f4f4f4;
-    color: #3c3c3c;
 }
 
 #deleteProfileButton {
