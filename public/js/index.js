@@ -357,8 +357,16 @@ $('#addBudgetSubmit').on('click', async (event) => {
     // Validate the inputs
     let errors = [];
     const categoryErrors = await validateStr('Budget Name', $('#budgetNameInput').val());
+    const  budgetAmountErrors = await validateAmount('Budget Amount', $('#budgetedAmountInput').val());
+
     if (categoryErrors.length > 0) {
         categoryErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    if (budgetAmountErrors.length > 0) {
+        budgetAmountErrors.forEach((err) => {
             errors.push(err);
         });
     }
@@ -385,8 +393,29 @@ $('#transactionSubmit').on('click', async (event) => {
     let errors = [];
     const amountErrors = await validateAmount('amount', $('#amountInput').val());
     const expenseNameErrors = await validateStr('expense name', $('#expenseNameInput').val());
+    const paymentMethodErrors = await validateStr('payment method', $('#methodInput').val());
+    const categoryErrors = await validateStr('category', $('#categoryInput').val());
+
     if (amountErrors.length > 0) {
         amountErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    if (expenseNameErrors.length > 0) {
+        expenseNameErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    if (paymentMethodErrors.length > 0) {
+        paymentMethodErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    if (categoryErrors.length > 0) {
+        categoryErrors.forEach((err) => {
             errors.push(err);
         });
     }
@@ -405,5 +434,299 @@ $('#transactionSubmit').on('click', async (event) => {
         $('.transactionForm').submit();
     }
 });
+
+// validate dashboard paycheck amount filter form
+$('#paycheckAmountFilter').on('click', async (event) => {
+    event.preventDefault();
+
+    let errors = [];
+
+    const minAmountErrors = await validateAmount('min amount', $('#paycheckMinAmount').val());
+    const maxAmountErrors = await validateAmount('max amount', $('#paycheckMaxAmount').val());
+
+    if (minAmountErrors.length > 0) {
+        minAmountErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    if (maxAmountErrors.length > 0) {
+        maxAmountErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    // check the errors list
+    if (errors.length > 0) {
+        // render the client-side error div
+        $('.clientSideErrors').show();
+
+        // add each error
+        errors.forEach((err) => {
+            $('.clientSideErrors').append(`<p>${err}</p>`);
+        });
+    }else {
+        $('.paycheckAmountFilter').submit();
+    }
+});
+
+// validate dashboard transaction amount filter form
+$('#transactionAmountFilter').on('click', async (event) => {
+    event.preventDefault();
+
+    let errors = [];
+
+    const minAmountErrors = await validateAmount('min amount', $('#transactionMinAmount').val());
+    const maxAmountErrors = await validateAmount('max amount', $('#transactionMaxAmount').val());
+
+    if (minAmountErrors.length > 0) {
+        minAmountErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    if (maxAmountErrors.length > 0) {
+        maxAmountErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    // check the errors list
+    if (errors.length > 0) {
+        // render the client-side error div
+        $('.clientSideErrors').show();
+
+        // add each error
+        errors.forEach((err) => {
+            $('.clientSideErrors').append(`<p>${err}</p>`);
+        });
+    }else {
+        $('.transactionAmountFilter').submit();
+    }
+});
+
+// validate dashboard transaction amount filter form
+$('#budgetAmountFilter').on('click', async (event) => {
+
+    event.preventDefault();
+
+    let errors = [];
+
+    const minAmountErrors = await validateAmount('min amount', $('#budgetMinAmount').val());
+    const maxAmountErrors = await validateAmount('max amount', $('#budgetMaxAmount').val());
+
+    if (minAmountErrors.length > 0) {
+        minAmountErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    if (maxAmountErrors.length > 0) {
+        maxAmountErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    // check the errors list
+    if (errors.length > 0) {
+        // render the client-side error div
+        $('.clientSideErrors').show();
+
+        // add each error
+        errors.forEach((err) => {
+            $('.clientSideErrors').append(`<p>${err}</p>`);
+        });
+    }else {
+        $('.budgetAmountFilter').submit();
+    }
+});
+
+// validate paychecks notes
+$('#searchByNotes').on('click', async (event) => {
+
+    event.preventDefault();
+
+    let errors = [];
+
+    const notesErrors = await validateStr('notes', $('#paycheckSearchByNotes').val());
+
+    if (notesErrors.length > 0) {
+        notesErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    // check the errors list
+    if (errors.length > 0) {
+        // render the client-side error div
+        $('.clientSideErrors').show();
+
+        // add each error
+        errors.forEach((err) => {
+            $('.clientSideErrors').append(`<p>${err}</p>`);
+        });
+    }else {
+        $('.searchByNotes').submit();
+    }
+});
+
+// validate transactions categories
+
+$('#transactionsCategoryFilter').on('click', async (event) => {
+
+    event.preventDefault();
+
+    let errors = [];
+
+    const catErrors = await validateStr('category', $('#transactionsCategory').val());
+
+    if (catErrors.length > 0) {
+        catErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    // check the errors list
+    if (errors.length > 0) {
+        // render the client-side error div
+        $('.clientSideErrors').show();
+
+        // add each error
+        errors.forEach((err) => {
+            $('.clientSideErrors').append(`<p>${err}</p>`);
+        });
+    }else {
+        $('.transactionsCategoryFilter').submit();
+    }
+});
+
+// validate transactions method
+
+$('#transactionMethodFilter').on('click', async (event) => {
+
+    event.preventDefault();
+
+    let errors = [];
+
+    const catErrors = await validateStr('payment method', $('#transactionsPaymentMethod').val());
+
+    if (catErrors.length > 0) {
+        catErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    // check the errors list
+    if (errors.length > 0) {
+        // render the client-side error div
+        $('.clientSideErrors').show();
+
+        // add each error
+        errors.forEach((err) => {
+            $('.clientSideErrors').append(`<p>${err}</p>`);
+        });
+    }else {
+        $('.transactionMethodFilter').submit();
+    }
+});
+
+
+// validate transactions expense name
+$('#transactionFilterByName').on('click', async (event) => {
+
+    event.preventDefault();
+
+    let errors = [];
+
+    const catErrors = await validateStr('expense name', $('#transactionSearchByName').val());
+
+    if (catErrors.length > 0) {
+        catErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    // check the errors list
+    if (errors.length > 0) {
+        // render the client-side error div
+        $('.clientSideErrors').show();
+
+        // add each error
+        errors.forEach((err) => {
+            $('.clientSideErrors').append(`<p>${err}</p>`);
+        });
+    }else {
+        $('.transactionFilterByName').submit();
+    }
+});
+
+
+// validate budgets category
+$('#budgetsCategoryFilter').on('click', async (event) => {
+
+    event.preventDefault();
+
+    let errors = [];
+
+    const catErrors = await validateStr('category', $('#budgetsCategory').val());
+
+    if (catErrors.length > 0) {
+        catErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    // check the errors list
+    if (errors.length > 0) {
+        // render the client-side error div
+        $('.clientSideErrors').show();
+
+        // add each error
+        errors.forEach((err) => {
+            $('.clientSideErrors').append(`<p>${err}</p>`);
+        });
+    }else {
+        $('.budgetsCategoryFilter').submit();
+    }
+});
+
+//validate year and month
+$('#budgetYearAndMonth').on('click', async (event) => {
+
+    event.preventDefault();
+
+    let errors = [];
+
+    const catErrors = await validateStr('Month', $('#budgetMonth').val());
+    const yearErrors = await validateStr('Year', $('#budgetYear').val());
+
+    if (catErrors.length > 0) {
+        catErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    if (yearErrors.length > 0) {
+        yearErrors.forEach((err) => {
+            errors.push(err);
+        });
+    }
+
+    // check the errors list
+    if (errors.length > 0) {
+        // render the client-side error div
+        $('.clientSideErrors').show();
+
+        // add each error
+        errors.forEach((err) => {
+            $('.clientSideErrors').append(`<p>${err}</p>`);
+        });
+    }else {
+        $('.budgetYearAndMonth').submit();
+    }
+})
+
+
+
 
 

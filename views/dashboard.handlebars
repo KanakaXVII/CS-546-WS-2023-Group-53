@@ -161,6 +161,8 @@
     <input type="button" onclick="location.href='/dashboard'" value="Go back to Dashboard!" />
   {{/if}}
 
+  <div class="clientSideErrors" hidden></div>
+
   <div class="dashboard-container">
     <table>
       <tr>
@@ -200,24 +202,24 @@
           <thead>
             <tr>
               <td>
-                <form>
+                <form class="paycheckAmountFilter">
                   <label for="paycheckAmountFilter">Filter by amount</label>
-                  <input type="number" name="paycheckMinAmount" placeholder="Minimum Amount"  />
-                  <input type="number" name="paycheckMaxAmount" placeholder="Maximum Amount"  />
-                  <input type="submit" value="Search" /> 
+                  <input type="number" name="paycheckMinAmount" placeholder="Minimum Amount" id="paycheckMinAmount"  />
+                  <input type="number" name="paycheckMaxAmount" placeholder="Maximum Amount" id="paycheckMaxAmount"  />
+                  <input type="submit" value="Search" id="paycheckAmountFilter" /> 
                 </form>
               </td>
             </tr>
             <tr>
               <td>
-              <form>
+              <form class="searchByNotes">
                 <label for="paycheckSearchByNotes">Search by Notes:</label>
                 <input
                   type="text"
                   id="paycheckSearchByNotes"
                   name="paycheckSearchByNotes"
                 />
-                <input type="submit" value="Search">
+                <input type="submit" value="Search" id="searchByNotes">
               </form>
               </td>
             </tr>
@@ -274,16 +276,16 @@
           <thead>
             <tr>
               <td>
-                <form>
-                  <input type="number" name="transactionMinAmount" placeholder="Minimum Amount"  />
-                  <input type="number" name="transactionMaxAmount" placeholder="Maximum Amount"  />
-                  <input type="submit" value="Search" /> 
+                <form class="transactionAmountFilter">
+                  <input type="number" name="transactionMinAmount" placeholder="Minimum Amount" id="transactionMinAmount" />
+                  <input type="number" name="transactionMaxAmount" placeholder="Maximum Amount" id="transactionMaxAmount" />
+                  <input type="submit" value="Search" id="transactionAmountFilter" /> 
                 </form>
               </td>
             </tr>
             <tr>
               <td>
-                <form>
+                <form class="transactionsCategoryFilter">
                 <label for="transactionsCategory">Select the category</label>
                 <input
                   list="categories"
@@ -295,15 +297,15 @@
                         <option value="{{this}}">{{this}}</option>
                     {{/each}}
                 </datalist>
-                <input type="submit" value="Search">
+                <input type="submit" value="Search" id="transactionsCategoryFilter">
                 </form>
               </td>
             </tr>
             <tr>
               <td>
-                <form>
+                <form class="transactionMethodFilter">
                   
-                <label for="transactionsPaymentMethod">Select by category</label>
+                <label for="transactionsPaymentMethod">Select by method</label>
                 
                 <input
                   list="paymentMethods"
@@ -315,7 +317,7 @@
                         <option value="{{this}}">{{this}}</option>
                     {{/each}}
                 </datalist>
-                <input type="submit" value="Search">
+                <input type="submit" value="Search" id="transactionMethodFilter">
               </form>
               </td>
             </tr>
@@ -327,14 +329,14 @@
             </tr>
             <tr>
               <td>
-              <form>
+              <form class="transactionFilterByName">
                 <label for="transactionSearchByName">Search by Expense Name:</label>
                 <input
                   type="text"
                   id="transactionSearchByName"
                   name="transactionSearchByName"
                 />
-                <input type="submit" value="Search">
+                <input type="submit" value="Search" id="transactionFilterByName">
               </form>
               </td>
             </tr>
@@ -389,7 +391,7 @@
           <thead>
             <tr>
               <td>
-                <form>
+                <form class="budgetsCategoryFilter">
                 <label for="budgetCategory">Select the category</label>
                 <input
                   list="bCategories"
@@ -401,13 +403,13 @@
                         <option value="{{this}}">{{this}}</option>
                     {{/each}}
                 </datalist>
-                <input type="submit" value="Search">
+                <input type="submit" value="Search" id="budgetsCategoryFilter">
                 </form>
               </td>
             </tr>
             <tr>
               <td>
-                <form>
+                <form class="budgetYearAndMonth">
                 <label for="budgetYear">Filter by year and month:</label>
                 <input
                   type="text"
@@ -433,16 +435,16 @@
                     <option value="December">
                 </datalist>
 
-                <input type="submit" value="Search">
+                <input type="submit" value="Search" id="budgetYearAndMonth">
               </form>
               </td>
             </tr>
             <tr>
               <td>
-                <form>
-                  <input type="number" name="budgetMinAmount" placeholder="Minimum Amount"  />
-                  <input type="number" name="budgetMaxAmount" placeholder="Maximum Amount"  />
-                  <input type="submit" value="Search" /> 
+                <form class="budgetAmountFilter">
+                  <input type="number" name="budgetMinAmount" placeholder="Minimum Amount"  id="budgetMinAmount"/>
+                  <input type="number" name="budgetMaxAmount" placeholder="Maximum Amount" id="budgetMaxAmount" />
+                  <input type="submit" value="Search" id="budgetAmountFilter"/> 
                 </form>
               </td>
             </tr>
