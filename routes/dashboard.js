@@ -35,9 +35,13 @@ router.route("/").get(async (req, res) => {
     hasTransactions = true;
   }
 
+
+
   // getting categories for transactions
   let transactionCategories = [];
   let transactionPaymentMethods = [];
+
+  if (hasTransactions){
   for (let i = 0; i < transactionRecords.length; i++) {
     transactionCategories.push(transactionRecords[i].category.toLowerCase());
     transactionPaymentMethods.push(
@@ -46,11 +50,13 @@ router.route("/").get(async (req, res) => {
   }
   transactionCategories = [...new Set(transactionCategories)];
   transactionPaymentMethods = [...new Set(transactionPaymentMethods)];
+}
+
   //end-getting categories for transactions
 
   // getting payment methods for transactions
  
- 
+
 
 
   //end-transactions
@@ -69,20 +75,23 @@ router.route("/").get(async (req, res) => {
       hasBudgets = true;
   }
 
+  
   // getting categories for budgets
   let budgetCategories = [];
 
-
+if (hasBudgets){
   for (let i = 0; i < budgetRecords.length; i++) {
       budgetCategories.push(budgetRecords[i].category.toLowerCase());
       
   }
   budgetCategories = [...new Set(budgetCategories)];
+}
 
   // getting years for budgets
   
 
   //end-budgets
+  
 
   let hasErrors = false;
   let errorMessage = undefined;
