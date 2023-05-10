@@ -40,6 +40,10 @@ const createUser = async (
     } catch (e) {
         throw [500, 'Failed to hash password'];
     }
+
+    // Add the default cash method
+    const defaultMethod = {_id: new ObjectId(), name: 'Cash'};
+    userInfo.paymentMethods.push(defaultMethod);
     
     // Get the DB collection
     const userCollection = await users();

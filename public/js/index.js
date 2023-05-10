@@ -106,11 +106,6 @@ const validateAmount = async (varName, varVal) => {
     
     varVal = Number(varVal);
 
-    // Init storage for errors
-    
-
-    // Make sure amount is not empty
-
     // make sure number is not negative
     if (varVal < 0) {
         errors.push(`${varName} must not be negative`);
@@ -118,39 +113,6 @@ const validateAmount = async (varName, varVal) => {
 
     return errors;
 }
-// check date for filters
-// const checkDate = async (dateReceived) => {
-//     let startDate = new Date(document.getElementById("transactionStartDate").value);
-//     let endDate = new Date(document.getElementById("transactionEndDate").value);
-//     let paycheckDate = new Date(dateReceived);
-
-//     if (startDate <= paycheckDate && paycheckDate <= endDate) {
-//       return true;
-//     } else {
-//       return false;
-//     }
-// }
-
-
-
-// const filterTable = () => {
-//     const query = document.querySelector('#filter').value.toLowerCase();
-//     const rows = document.querySelectorAll('tbody tr');
-
-//     rows.forEach((row) => {
-//     const data = {
-//       date: row.querySelector('td:nth-child(1)').textContent.toLowerCase(),
-//       amount: row.querySelector('td:nth-child(2)').textContent.toLowerCase(),
-//       notes: row.querySelector('td:nth-child(3)').textContent.toLowerCase(),
-//     };
-
-//     if (data.date.includes(query) || data.amount.includes(query) || data.notes.includes(query)) {
-//       row.style.display = '';
-//     } else {
-//       row.style.display = 'none';
-//     }
-//     });
-// };
 
 /* Non-function Section */
 
@@ -309,21 +271,6 @@ $(function() {
       window.location.href = url;
     });
   });
-   
-// google.charts.load('current', { packages: ['corechart'] });
-// google.charts.setOnLoadCallback(drawChart);
-// //   console.log(graphData);
-//   function drawChart() {
-//     let data = google.visualization.arrayToDataTable(graphData);
-  
-//     let options = {'title':'How Much Pizza I Ate Last Night',
-//     'width':400,
-//     'height':300};
-  
-//     let chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-//     chart.draw(data, options);
-//   }
-
 
 
 // Validate payment method form
