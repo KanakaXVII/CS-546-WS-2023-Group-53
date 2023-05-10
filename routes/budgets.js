@@ -48,7 +48,7 @@ router
     let month = xss(splitDate[1]);
     let year = xss(splitDate[0]);
     let amount = xss(req.body.budgetedAmountInput);
-    let name = xss(req.body.budgetNameInput);
+    let category = xss(req.body.budgetNameInput);
 
     // Convert numerical inputs to numerical types
     month = Number(month);
@@ -70,7 +70,7 @@ router
         req.session.profile._id.toString(),
         monthVals.monthStr,
         year,
-        name,
+        category,
         amount,
         recurring
       );
