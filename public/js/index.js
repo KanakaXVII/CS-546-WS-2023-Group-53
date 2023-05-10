@@ -90,6 +90,36 @@ const validateEmail = async (emailAddress) => {
     return errors;
 }
 
+// Validate amount inputs
+const validateAmount = async (varName, varVal) => {
+    // make sure it is not empty
+
+    let errors = [];
+
+    if (varVal.trim().length === 0) {
+        errors.push(`${varName} must not be empty space`);
+    }
+
+    // make sure it contains only numbers
+    const numberPattern = /^[0-9]+$/;
+    if (!numberPattern.test(varVal)) {
+        errors.push(`${varName} must consist of only numbers`);
+    }
+    
+    varVal = Number(varVal);
+
+    // Init storage for errors
+    
+
+    // Make sure amount is not empty
+
+    // make sure number is not negative
+    if (varVal < 0) {
+        errors.push(`${varName} must not be negative`);
+    }
+
+    return errors;
+}
 // check date for filters
 // const checkDate = async (dateReceived) => {
 //     let startDate = new Date(document.getElementById("transactionStartDate").value);
@@ -296,6 +326,29 @@ $(function() {
 //     chart.draw(data, options);
 //   }
 
+
+
+// Validate payment method form
+$('#newMethodNameSubmit').on('click', async (event) => {
+    // Prevent the default action
+    event.preventDefault();
+
+    // Validate the string input
+    let errorList = [];
+    try {
+        methodNameErrors = await validateStr('Payment Method Name', $('#methodNameInput').val());
+    } catch (e) {
+        errorList.append(e);
+    }
+
+    // Check for errors
+    if (errorList.length > 0) {
+        $('.clientErrors').append(e);
+    } else {
+        $('#newPaymentMethodForm').submit();
+    }
+});
+
 // Validate new budget form
 $('#addBudgetSubmit').on('click', async (event) => {
     // Prevent the default action
@@ -324,23 +377,33 @@ $('#addBudgetSubmit').on('click', async (event) => {
     }
 });
 
-// Validate payment method form
-$('#newMethodNameSubmit').on('click', async (event) => {
-    // Prevent the default action
+// validate new transaction form
+$('#transactionSubmit').on('click', async (event) => {
+
     event.preventDefault();
 
-    // Validate the string input
-    let errorList = [];
-    try {
-        methodNameErrors = await validateStr('Payment Method Name', $('#methodNameInput').val());
-    } catch (e) {
-        errorList.append(e);
+    let errors = [];
+    const amountErrors = await validateAmount('amount', $('#amountInput').val());
+    const expenseNameErrors = await validateStr('expense name', $('#expenseNameInput').val());
+    if (amountErrors.length > 0) {
+        amountErrors.forEach((err) => {
+            errors.push(err);
+        });
     }
 
-    // Check for errors
-    if (errorList.length > 0) {
-        $('.clientErrors').append(e);
-    } else {
-        $('#newPaymentMethodForm').submit();
+    // check the errors list
+    if (errors.length > 0) {
+        // render the client-side error div
+        $('.clientSideErrors').show();
+
+        // add each error
+        errors.forEach((err) => {
+            $('.clientSideErrors').append(`<p>${err}</p>`);
+        });
+    }
+    else {
+        $('.transactionForm').submit();
     }
 });
+
+

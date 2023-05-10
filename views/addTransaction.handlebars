@@ -16,6 +16,8 @@
         <p class="errorMessage">{{errorMessage}}</p>
         {{/if}}
 
+        <div class="clientSideErrors" hidden></div>
+
         <p>
             Add a new transaction
         </p>
@@ -28,15 +30,16 @@
 
             <!-- Method Input -->
             <label for="methodInput">Payment Method</label><br>
-            <select name="methodInput" id="methodInput" required>
+            {{!-- <select name="methodInput" id="methodInput" required> --}}
                 {{!-- <option value="Credit Card">Credit Card</option>
                 <option value="Debit Card">Debit Card</option>
                 <option value="Cash">Cash</option>
                 <option value="Bank Transfer">Bank Transfer</option> --}}
-                {{#each paymentMethods}}
+                {{!-- {{#each paymentMethods}}
                 <option value={{ this.name }}>{{ this.name }}</option>
-                {{/each}}
-            </select><br>
+                {{/each}} --}}
+                <input type="text" name="methodInput" id="methodInput" placeholder="Cash" required><br>
+            {{!-- </select><br> --}}
 
             <!-- Expense Name Input -->
             <label for="expenseNameInput">Expense Name</label><br>
