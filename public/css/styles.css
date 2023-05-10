@@ -134,6 +134,12 @@ input[type="submit"]:hover {
 .backButton:hover {
     color: black;
 }
+
+.clientErrors {
+    color: red;
+}
+
+
 /* ----- ID Sets ----- */
 #loginSubmit, #registerSubmit {
     margin-top: 10%;
