@@ -50,6 +50,37 @@ router
     let amount = xss(req.body.budgetedAmountInput);
     let category = xss(req.body.budgetNameInput);
 
+    // Validate the inputs
+    try {
+      helpers.validateString('Budget Month', month);
+    } catch (e) {
+      res.redirect(`/budgets?hasErrors=true&errorMessage=${e}`);
+      return;
+    }
+
+    try {
+      // Make sure the year is within legal bounds
+      const currentYear = new Date().getFullYear();
+      helpers.validateYear('Budget Year', Number(year), currentYear, currentYear+100);
+    } catch (e) {
+      res.redirect(`/budgets?hasErrors=true&errorMessage=${e}`);
+      return;
+    }
+
+    try {
+      helpers.validateNumber('Budget Amount', Number(amount));
+    } catch (e) {
+      res.redirect(`/budgets?hasErrors=true&errorMessage=${e}`);
+      return;
+    }
+
+    try {
+      helpers.validateString('Budget Name', category);
+    } catch (e) {
+      res.redirect(`/budgets?hasErrors=true&errorMessage=${e}`);
+      return;
+    }
+
     // Convert numerical inputs to numerical types
     month = Number(month);
     year = Number(year);
@@ -58,12 +89,6 @@ router
     // Get the month name
     const monthVals = await helpers.convertMonth(month);
 
-    // Determine if it is recurring or not
-    let recurring = false;
-    if (req.body.recurringInput) {
-      recurring = true;
-    }
-
     // Add the new budget
     try {
       const newBudget = await budgetData.createBudget(
@@ -71,8 +96,7 @@ router
         monthVals.monthStr,
         year,
         category,
-        amount,
-        recurring
+        amount
       );
       } catch (e) {
         res.redirect(`/budgets?hasErrors=true&errorMessage=${e}`);

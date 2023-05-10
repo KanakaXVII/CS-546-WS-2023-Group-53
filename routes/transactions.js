@@ -40,6 +40,8 @@ router
             // Get the user's payment methods
             const paymentMethodresults = await userData.getPaymentMethodsByID(req.session.profile._id);
 
+            // Determine if a user has 
+
             // Send the results back
             res.render('addTransaction', {
                 title: 'Add Transactions',
@@ -50,6 +52,7 @@ router
                 transactions: transactions,
                 paymentMethods: paymentMethodresults.paymentMethods
             });
+            return;
 
     })
     // .post(async (req, res) => {
@@ -110,10 +113,51 @@ router
         const transactionInfo = req.body;
         const userId = req.params.id;
 
+        // Init errors
+        let errors = [];
 
         // Validate params were passed
         if (!transactionInfo || Object.keys(transactionInfo).length === 0) {
-            return res.status(400).json({ error: 'There are no fields in the request body.' });
+            errors.push('There are no fields in the request body.');
+        }
+
+        // Validate the rest of the inputs
+        try {
+            helpers.validateDateString('Transaction Date', transactionInfo.dateInput);
+        } catch (e) {
+            errors.push(e);
+        }
+
+        try {
+            helpers.validateString('Method Name', transactionInfo.methodInput);
+        } catch (e) {
+            errors.push(e);
+        }
+
+        try {
+            helpers.validateString('Expense Name', transactionInfo.expenseNameInput);
+        } catch (e) {
+            errors.push(e);
+        }
+
+        try {
+            helpers.validateNumber('Transaction Amount', Number(transactionInfo.amountInput));
+        } catch (e) {
+            errors.push(e);
+        }
+
+        try {
+            helpers.validateString('Transaction Category', transactionInfo.categoryInput);
+        } catch (e) {
+            errors.push(e);
+        }
+
+        // Check if errors were collected
+        if (errors.length > 0) {
+            res.render('addTransaction', {
+                hasErrors: true,
+                errors: errors
+            });
         }
 
         // Add new transaction to DB
@@ -127,6 +171,7 @@ router
         );
 
         res.redirect('/transactions');
+        return;
     })
     .put(async (req, res) => {
         // Get the request body

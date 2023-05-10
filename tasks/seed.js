@@ -135,8 +135,7 @@ const seed = async () => {
         month: 'March',
         year: 2023,
         name: 'Books',
-        amount: 150,
-        recurring: true
+        amount: 150
     };
 
     try {
@@ -145,8 +144,7 @@ const seed = async () => {
             user1BudgetInput.month,
             user1BudgetInput.year,
             user1BudgetInput.name,
-            user1BudgetInput.amount,
-            user1BudgetInput.recurring
+            user1BudgetInput.amount
         );
     } catch (e) {
         console.log(e);
@@ -271,8 +269,7 @@ const seed = async () => {
         month: 'March',
         year: 2023,
         name: 'Restaurants',
-        amount: 300,
-        recurring: true
+        amount: 300
     };
 
     try {
@@ -281,8 +278,7 @@ const seed = async () => {
             user2BudgetInput.month,
             user2BudgetInput.year,
             user2BudgetInput.name,
-            user2BudgetInput.amount,
-            user2BudgetInput.recurring
+            user2BudgetInput.amount
         );
     } catch (e) {
         console.log(e);
@@ -407,8 +403,7 @@ const seed = async () => {
         month: 'March',
         year: 2023,
         name: 'Clothes',
-        amount: 500,
-        recurring: true
+        amount: 500
     };
 
     try {
@@ -417,8 +412,7 @@ const seed = async () => {
             user3BudgetInput.month,
             user3BudgetInput.year,
             user3BudgetInput.name,
-            user3BudgetInput.amount,
-            user3BudgetInput.recurring
+            user3BudgetInput.amount
         );
     } catch (e) {
         console.log(e);
