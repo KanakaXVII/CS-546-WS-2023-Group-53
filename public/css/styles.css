@@ -64,7 +64,7 @@ input[type="submit"]:hover {
     width: 50%;
     padding: 20px;
     border-radius: 15px;
-    background-color: #11999e;
+    background-color: #3c3c3c;
     box-shadow: 0px 15px 15px rgba(0, 0, 0, 0.5);
 }
 
@@ -90,7 +90,7 @@ input[type="submit"]:hover {
 }
 
 .errorList {
-    color: red;
+    color: darkred;
     list-style-type: none;
 }
 
@@ -116,7 +116,7 @@ input[type="submit"]:hover {
 
 .deletePaycheckButton, .deleteBudgetButton, .deletePayMethodButton {
     text-decoration: none;
-    color: red;
+    color: darkred;
     font-weight: bold;
 }
 
@@ -139,8 +139,8 @@ input[type="submit"]:hover {
     margin-top: 10%;
     font-family: 'Open Sans', sans-serif;
     padding: 8px;
-    background-color: #3c3c3c;
-    color: #f4f4f4;
+    background-color: #f4f4f4;
+    color: #3c3c3c;
     font-weight: bold;
     border-radius: 15px;
 }
@@ -155,7 +155,7 @@ input[type="submit"]:hover {
 }
 
 #deleteProfileButton {
-    color: red;
+    color: darkred;
     text-decoration: none;
     font-weight: bold;
     padding: 10px 20px;
