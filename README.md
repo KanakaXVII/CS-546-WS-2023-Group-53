@@ -6,10 +6,13 @@ This project aims to provide a web app that can be used to track personal financ
 
 # Steps
 1. Install Node packages by running `npm i`
-2. Seed the database by running `node ./tasks/seed.js`
+2. Create a `.env` file in the project
+3. Copy data from the file labeled `env_data` to the `.env` file
+    This ensures that the Sendgrid API works as intended
+4. Seed the database by running `node ./tasks/seed.js`
     - This will populate three sample users in the DB
-3. Log in
+5. Log in
     - Use one of the sample users from the seed by grabbing the respective email and password from the seed file
     - Create a user of your own
         - Important: The app uses Sendgrid for password resets, so please do not use an email you do not own to avoid accidentally sending an email to a random person!
-4. Explore the UI!
+6. Explore the UI!
